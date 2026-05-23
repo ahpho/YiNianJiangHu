@@ -4,7 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-"一念江湖" is a game project. This directory is currently empty — awaiting initial codebase setup.
+"一念江湖"是一款武侠题材的单页面 RPG 游戏。玩家在 30 天江湖日历内通过抉择触发 7 种结局之一。核心系统包括 12 NPC × 4 维好感度、5 大门派 × 20 招武学、回合制战斗。视觉风格为朱砂红古卷风。
+
+## Design Documents
+
+设计文档位于 `docs/design/` 目录：
+
+- `00-worldbuilding.md` — 世界观总纲（时代背景、五大地理、势力格局）
+- `01-factions.md` — 五大门派 + 武学体系（20 招武学详细数据）
+- `02-npcs.md` — 12 NPC 名册（好感度初始值、剧情线、隐藏关系）
+- `03-endings.md` — 7 种结局（触发条件、互斥关系）
+- `04-art-style.md` — 美术风格基线（色彩、字体、CSS 变量、动效）
+- `05-system-overview.md` — 系统设计概览（时间/好感度/战斗/关系图）
 
 ## Build & Run
 
