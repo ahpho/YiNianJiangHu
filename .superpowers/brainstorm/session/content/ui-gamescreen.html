@@ -1,0 +1,187 @@
+<h2>主游戏界面布局 — GameScreen</h2>
+<p class="subtitle">桌面端双栏设计 | 左侧=事件与行动 | 右侧=状态面板</p>
+
+<div class="section">
+  <div class="mockup">
+    <div class="mockup-header">GameScreen 布局原型（桌面端 ≥1024px）</div>
+    <div class="mockup-body" style="padding: 0; overflow: hidden;">
+      <!-- 整体布局 -->
+      <div style="display: grid; grid-template-columns: 1fr 320px; min-height: 580px; font-size: 14px;">
+
+        <!-- ===== 左栏：事件与行动 ===== -->
+        <div style="border-right: 2px solid var(--paper-aged); display: flex; flex-direction: column;">
+
+          <!-- 顶部时间轴 -->
+          <div style="background: var(--paper-cream); padding: 12px 20px; border-bottom: 1px solid var(--paper-aged); display: flex; align-items: center; gap: 16px;">
+            <span style="font-family: serif; font-size: 18px; font-weight: 700; color: var(--cinnabar);">第 10 天</span>
+            <div style="display: flex; gap: 8px;">
+              <span style="padding: 4px 12px; border-radius: 4px; background: var(--paper-aged); color: var(--ink-light); font-size: 12px;">卯</span>
+              <span style="padding: 4px 12px; border-radius: 4px; background: var(--cinnabar); color: var(--paper-white); font-size: 12px; font-weight: 600;">午</span>
+              <span style="padding: 4px 12px; border-radius: 4px; background: var(--paper-aged); color: var(--ink-light); font-size: 12px;">酉</span>
+              <span style="padding: 4px 12px; border-radius: 4px; background: var(--paper-aged); color: var(--ink-light); font-size: 12px;">子</span>
+            </div>
+            <div style="margin-left: auto; display: flex; gap: 12px; font-size: 12px; color: var(--ink-light);">
+              <span>♥ 85</span>
+              <span>⚡ 60</span>
+            </div>
+          </div>
+
+          <!-- 中部：事件/对话区（滚动区域） -->
+          <div style="flex: 1; padding: 20px 24px; overflow-y: auto; background: var(--paper-white);">
+            <!-- 场景描述 -->
+            <p style="color: var(--ink-light); font-size: 13px; font-style: italic; margin-bottom: 16px;">嵩山·太虚剑宗密室。烛光摇曳，墙上的画像在暗处注视着你。</p>
+
+            <!-- 对话 -->
+            <div style="margin-bottom: 12px;">
+              <span style="color: var(--faction-taixu); font-weight: 600; font-size: 13px;">苏青衡</span>
+              <p style="margin-top: 4px; color: var(--ink-gray); line-height: 1.7;">师父他……果然和朝廷有来往。这封密信，你觉得我该怎么办？</p>
+            </div>
+
+            <!-- 分割线 -->
+            <div style="height: 1px; background: linear-gradient(to right, transparent, var(--paper-aged), transparent); margin: 16px 0;"></div>
+
+            <!-- 好感度变化提示 -->
+            <div style="background: var(--paper-cream); border: 1px solid var(--paper-aged); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: var(--ink-light);">
+              此选择将影响：苏青衡 · 清虚真人 的好感度
+            </div>
+          </div>
+
+          <!-- 底部：行动选择面板 -->
+          <div style="background: var(--paper-cream); border-top: 2px solid var(--paper-aged); padding: 16px 20px;">
+            <div style="font-size: 12px; color: var(--ink-light); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;">选择你的行动</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="background: var(--cinnabar); color: var(--paper-white); padding: 10px 16px; border-radius: 4px; cursor: pointer; font-family: serif; display: flex; justify-content: space-between; align-items: center;">
+                <span>公开密信，揭露真相</span>
+                <span style="font-size: 11px; opacity: 0.8;">信任↑ 敬畏↓</span>
+              </div>
+              <div style="background: var(--paper-aged); color: var(--ink-gray); padding: 10px 16px; border-radius: 4px; cursor: pointer; font-family: serif; display: flex; justify-content: space-between; align-items: center;">
+                <span>替他隐瞒，维护师门</span>
+                <span style="font-size: 11px; opacity: 0.8;">信任↑ 亲密↓</span>
+              </div>
+              <div style="background: var(--paper-aged); color: var(--ink-gray); padding: 10px 16px; border-radius: 4px; cursor: pointer; font-family: serif; display: flex; justify-content: space-between; align-items: center;">
+                <span>不表态，先去找老魏商议</span>
+                <span style="font-size: 11px; opacity: 0.8;">跳转·酉时</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== 右栏：状态面板 ===== -->
+        <div style="background: var(--paper-cream); padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto;">
+
+          <!-- 角色卡片 -->
+          <div>
+            <div style="font-size: 11px; color: var(--ink-light); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">无名少侠</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 13px;">
+              <div style="display: flex; justify-content: space-between;"><span style="color: var(--ink-light);">生命</span><span style="color: var(--cinnabar-dark);">85/100</span></div>
+              <div style="display: flex; justify-content: space-between;"><span style="color: var(--ink-light);">气力</span><span style="color: var(--info);">60/100</span></div>
+              <div style="display: flex; justify-content: space-between;"><span style="color: var(--ink-light);">攻击</span><span>18</span></div>
+              <div style="display: flex; justify-content: space-between;"><span style="color: var(--ink-light);">防御</span><span>12</span></div>
+            </div>
+          </div>
+
+          <div style="height: 1px; background: var(--paper-aged);"></div>
+
+          <!-- 装备武学 -->
+          <div>
+            <div style="font-size: 11px; color: var(--ink-light); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">装备武学</div>
+            <div style="display: flex; flex-direction: column; gap: 4px; font-size: 13px;">
+              <div style="display: flex; justify-content: space-between;"><span style="color: var(--faction-taixu);">太虚十三剑</span><span style="color: var(--ink-light);">剑·攻</span></div>
+              <div style="display: flex; justify-content: space-between;"><span style="color: var(--faction-taixu);">剑气如虹</span><span style="color: var(--ink-light);">剑·防</span></div>
+              <div style="display: flex; justify-content: space-between;"><span style="color: var(--faction-tingyu);">听雨十八拍</span><span style="color: var(--ink-light);">气·攻</span></div>
+              <div style="color: var(--ink-light); text-align: center; padding: 4px; border: 1px dashed var(--paper-aged); border-radius: 4px;">+ 空槽位</div>
+            </div>
+          </div>
+
+          <div style="height: 1px; background: var(--paper-aged);"></div>
+
+          <!-- NPC 好感度（简要列表） -->
+          <div style="flex: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 11px; color: var(--ink-light); text-transform: uppercase; letter-spacing: 0.1em;">江湖关系</span>
+              <span style="font-size: 11px; color: var(--accent); cursor: pointer;">关系图 →</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <!-- NPC 1 -->
+              <div style="font-size: 12px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                  <span style="color: var(--faction-taixu);">苏青衡</span>
+                  <span style="color: var(--ink-light);">信 50</span>
+                </div>
+                <div style="height: 4px; background: var(--paper-aged); border-radius: 2px; overflow: hidden;">
+                  <div style="width: 50%; height: 100%; background: var(--gold); border-radius: 2px;"></div>
+                </div>
+              </div>
+              <!-- NPC 2 -->
+              <div style="font-size: 12px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                  <span style="color: var(--faction-tingyu);">沈听雨</span>
+                  <span style="color: var(--ink-light);">信 20 敬 45</span>
+                </div>
+                <div style="height: 4px; background: var(--paper-aged); border-radius: 2px; overflow: hidden; display: flex;">
+                  <div style="width: 20%; height: 100%; background: var(--gold); border-radius: 2px 0 0 2px;"></div>
+                  <div style="width: 25%; height: 100%; background: var(--info); border-radius: 0 2px 2px 0;"></div>
+                </div>
+              </div>
+              <!-- NPC 3 -->
+              <div style="font-size: 12px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                  <span style="color: var(--faction-fentian);">厉无双</span>
+                  <span style="color: var(--ink-light);">敬 60 怖 50</span>
+                </div>
+                <div style="height: 4px; background: var(--paper-aged); border-radius: 2px; overflow: hidden; display: flex;">
+                  <div style="width: 60%; height: 100%; background: var(--info); border-radius: 2px 0 0 2px;"></div>
+                  <div style="width: 50%; height: 100%; background: var(--ink-black); border-radius: 0 2px 2px 0;"></div>
+                </div>
+              </div>
+              <!-- 更多提示 -->
+              <div style="text-align: center; color: var(--ink-light); font-size: 11px; padding-top: 4px;">··· 点击展开全部 12 位 NPC</div>
+            </div>
+          </div>
+
+          <div style="height: 1px; background: var(--paper-aged);"></div>
+
+          <!-- 已解锁门派声望 -->
+          <div>
+            <div style="font-size: 11px; color: var(--ink-light); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">门派声望</div>
+            <div style="display: flex; flex-direction: column; gap: 4px; font-size: 12px;">
+              <div style="display: flex; justify-content: space-between;"><span style="color: var(--faction-taixu);">太虚剑宗</span><span>65</span></div>
+              <div style="display: flex; justify-content: space-between;"><span style="color: var(--faction-tieqi);">铁骑营</span><span>40</span></div>
+              <div style="display: flex; justify-content: space-between;"><span style="color: var(--faction-fentian);">焚天教</span><span style="color: var(--cinnabar);">15</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>布局说明</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 14px;">
+    <div>
+      <h3 style="color: var(--cinnabar); margin-bottom: 0.5rem;">左栏（事件区）</h3>
+      <ul style="margin-left: 1.25rem; color: var(--text-secondary); line-height: 2;">
+        <li><strong>顶部时间轴</strong> — 天数 + 当前时辰高亮 + 生命/气力</li>
+        <li><strong>中部滚动区</strong> — 场景描写、对话、好感度变化预览</li>
+        <li><strong>底部行动面板</strong> — 当前可选行动（2-4 个选项）</li>
+        <li>滚动区与行动面板分离，对话不遮挡选择</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color: var(--info); margin-bottom: 0.5rem;">右栏（状态面板）</h3>
+      <ul style="margin-left: 1.25rem; color: var(--text-secondary); line-height: 2;">
+        <li><strong>角色属性</strong> — 生命、气力、攻防数值</li>
+        <li><strong>装备武学</strong> — 当前 4 招技能（可点击切换）</li>
+        <li><strong>江湖关系</strong> — NPC 好感度简览（可展开/跳转关系图）</li>
+        <li><strong>门派声望</strong> — 已接触门派的声望值</li>
+        <li>始终可见，无需切换标签</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="text-align: center; margin-top: 1.5rem;">
+  这是主游戏界面的布局。请在终端告诉我：这个双栏设计是否合理？有想调整的地方吗？
+</p>

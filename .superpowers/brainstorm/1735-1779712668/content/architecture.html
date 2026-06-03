@@ -1,0 +1,154 @@
+<h2>一念江湖 — 技术架构总览</h2>
+<p class="subtitle">React + TypeScript + Vite + Vercel | 桌面端优先 | 数据驱动事件系统</p>
+
+<div class="section">
+  <h3>项目目录结构</h3>
+  <div class="mockup">
+    <div class="mockup-header">src/ 目录结构</div>
+    <div class="mockup-body" style="font-family: monospace; font-size: 14px; line-height: 1.8;">
+      <pre style="margin:0; color: var(--text-primary);">
+src/
+├── <span style="color: var(--accent);">main.tsx</span>                  # 入口
+├── <span style="color: var(--accent);">App.tsx</span>                    # 根路由
+│
+├── <span style="color: var(--success);">engine/</span>                    # 核心游戏引擎（纯逻辑，零 UI）
+│   ├── <span style="color: var(--text-secondary);">GameState.ts</span>         # 状态类型定义
+│   ├── <span style="color: var(--text-secondary);">TimeEngine.ts</span>        # 时间推进、时辰判定
+│   ├── <span style="color: var(--text-secondary);">FavorEngine.ts</span>       # 好感度计算（四维模型）
+│   ├── <span style="color: var(--text-secondary);">CombatEngine.ts</span>      # 回合制战斗逻辑
+│   ├── <span style="color: var(--text-secondary);">EventEngine.ts</span>       # 事件触发、条件判定
+│   ├── <span style="color: var(--text-secondary);">EndingEngine.ts</span>      # 结局判定
+│   └── <span style="color: var(--text-secondary);">FlagEngine.ts</span>        # 标记管理
+│
+├── <span style="color: var(--warning);">data/</span>                      # 全部游戏数据（JSON 驱动）
+│   ├── <span style="color: var(--text-secondary);">events/</span>              # 事件脚本（按天数组织）
+│   │   ├── day01.json
+│   │   ├── day02.json
+│   │   ├── ...
+│   │   └── day30.json
+│   ├── <span style="color: var(--text-secondary);">npcs.json</span>            # NPC 基础数据
+│   ├── <span style="color: var(--text-secondary);">factions.json</span>        # 门派数据
+│   ├── <span style="color: var(--text-secondary);">martial-arts.json</span>    # 武学数据
+│   ├── <span style="color: var(--text-secondary);">endings.json</span>         # 结局条件
+│   └── <span style="color: var(--text-secondary);">random-events.json</span>   # 随机遭遇池
+│
+├── <span style="color: var(--cinnabar);">ui/</span>                        # React 组件
+│   ├── <span style="color: var(--text-secondary);">screens/</span>             # 全屏场景
+│   │   ├── <span style="color: var(--text-secondary);">TitleScreen.tsx</span>
+│   │   ├── <span style="color: var(--text-secondary);">GameScreen.tsx</span>    # 主游戏界面（双栏布局）
+│   │   ├── <span style="color: var(--text-secondary);">CombatScreen.tsx</span>
+│   │   ├── <span style="color: var(--text-secondary);">RelationGraph.tsx</span>
+│   │   └── <span style="color: var(--text-secondary);">EndingScreen.tsx</span>
+│   ├── <span style="color: var(--text-secondary);">components/</span>          # 可复用组件
+│   │   ├── <span style="color: var(--text-secondary);">Timeline.tsx</span>      # 时间轴（天数 + 时辰）
+│   │   ├── <span style="color: var(--text-secondary);">ActionPanel.tsx</span>   # 行动选择面板
+│   │   ├── <span style="color: var(--text-secondary);">DialogueBox.tsx</span>   # 对话框（逐字打印）
+│   │   ├── <span style="color: var(--text-secondary);">FavorDisplay.tsx</span>  # 好感度面板
+│   │   ├── <span style="color: var(--text-secondary);">CharSheet.tsx</span>     # 角色属性面板
+│   │   └── <span style="color: var(--text-secondary);">CombatUI.tsx</span>      # 战斗界面组件
+│   └── <span style="color: var(--text-secondary);">hooks/</span>               # 自定义 Hooks
+│       ├── <span style="color: var(--text-secondary);">useGameState.ts</span>
+│       └── <span style="color: var(--text-secondary);">useEventRunner.ts</span>
+│
+├── <span style="color: #7B68AE;">styles/</span>                    # 古卷风 CSS
+│   ├── <span style="color: var(--text-secondary);">variables.css</span>        # 朱砂红色板（来自设计文档）
+│   ├── <span style="color: var(--text-secondary);">scroll-frame.css</span>     # 卷轴边框
+│   ├── <span style="color: var(--text-secondary);">animations.css</span>       # 墨迹动效
+│   └── <span style="color: var(--text-secondary);">global.css</span>
+│
+├── <span style="color: var(--text-secondary);">types/</span>                    # 全局类型定义
+│   └── <span style="color: var(--text-secondary);">index.ts</span>
+│
+└── <span style="color: var(--text-secondary);">utils/</span>                    # 纯函数工具
+    ├── <span style="color: var(--text-secondary);">math.ts</span>               # 伤害公式等
+    └── <span style="color: var(--text-secondary);">condition-parser.ts</span>  # 事件条件表达式解析
+      </pre>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>数据流架构</h3>
+  <div class="mockup">
+    <div class="mockup-header">核心数据流</div>
+    <div class="mockup-body" style="font-family: monospace; font-size: 13px; line-height: 1.6;">
+      <pre style="margin:0;">
+┌──────────────────────────────────────────────────────────┐
+│                     JSON Data Layer                      │
+│  events/*.json  npcs.json  martial-arts.json  endings.json│
+└─────────────────────┬────────────────────────────────────┘
+                      │ 加载 & 校验
+                      ▼
+┌──────────────────────────────────────────────────────────┐
+│                    Engine Layer (纯逻辑)                  │
+│  TimeEngine → EventEngine → FavorEngine → EndingEngine   │
+│  CombatEngine（独立战斗循环）                              │
+│  FlagEngine（全局标记状态）                                │
+└─────────────────────┬────────────────────────────────────┘
+                      │ 状态更新（immutable）
+                      ▼
+┌──────────────────────────────────────────────────────────┐
+│                    React State (Zustand)                  │
+│  GameState { day, timeslot, favors, flags, health, qi... }│
+└─────────────────────┬────────────────────────────────────┘
+                      │ hooks: useGameState / useEventRunner
+                      ▼
+┌──────────────────────────────────────────────────────────┐
+│                    UI Layer (React)                       │
+│  GameScreen (双栏: 左=事件+行动, 右=属性面板)              │
+│  CombatScreen / RelationGraph / EndingScreen              │
+└──────────────────────────────────────────────────────────┘
+      </pre>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>技术选型</h3>
+  <div class="cards">
+    <div class="card">
+      <div class="card-image" style="background: var(--bg-tertiary); display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem;">
+        <span style="font-size: 1.5rem; font-weight: 700; color: var(--accent);">Vite</span>
+        <span style="font-size: 0.8rem; color: var(--text-secondary);">构建工具 + 开发服务器</span>
+      </div>
+      <div class="card-body">
+        <h3>构建 & 开发</h3>
+        <p>Vite + React SWC 插件，HMR 热更新。部署到 Vercel 自动 CI/CD。</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-image" style="background: var(--bg-tertiary); display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem;">
+        <span style="font-size: 1.5rem; font-weight: 700; color: var(--cinnabar);">Zustand</span>
+        <span style="font-size: 0.8rem; color: var(--text-secondary);">状态管理</span>
+      </div>
+      <div class="card-body">
+        <h3>状态管理</h3>
+        <p>轻量级，适合游戏状态。支持中间件（持久化、DevTools）。比 Redux 少 80% 样板。</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-image" style="background: var(--bg-tertiary); display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem;">
+        <span style="font-size: 1.5rem; font-weight: 700; color: var(--success);">纯 CSS</span>
+        <span style="font-size: 0.8rem; color: var(--text-secondary);">无 UI 框架</span>
+      </div>
+      <div class="card-body">
+        <h3>样式方案</h3>
+        <p>古卷风定制 CSS，不用 Tailwind/UI 库。CSS Variables + 模块化组织。04-art-style.md 已定义完整。</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-image" style="background: var(--bg-tertiary); display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem;">
+        <span style="font-size: 1.5rem; font-weight: 700; color: var(--info);">d3-force</span>
+        <span style="font-size: 0.8rem; color: var(--text-secondary);">关系图可视化</span>
+      </div>
+      <div class="card-body">
+        <h3>关系图</h3>
+        <p>d3-force 力导向图 + React 渲染 SVG 节点。05-system-overview.md 已定义交互需求。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="text-align: center; margin-top: 2rem;">
+  请在终端回复你的想法。架构是否合理？有需要调整的地方吗？
+</p>

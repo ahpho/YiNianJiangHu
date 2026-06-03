@@ -3,7 +3,13 @@
     "allow": [
       "Bash(dir /a)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(bash *)",
+      "Bash(node *)",
+      "Bash(BRAINSTORM_DIR=\"D:/Work/Game/一念江湖/.superpowers/brainstorm/session\" BRAINSTORM_PORT=52345 node *)",
+      "Bash(BRAINSTORM_DIR=\"D:/Work/Game/一念江湖/.superpowers/brainstorm/session\" BRAINSTORM_PORT=52345 nohup node \"D:/Work/Game/一念江湖/.claude/skills/brainstorming/scripts/server.cjs\")",
+      "Bash(echo \"PID=$!\")",
+      "Bash(python -m http.server 52346 --bind 127.0.0.1)"
     ]
   }
 }
