@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>一念江湖 — 设计预览</title>
+  <style>
+    /* ===== 朱砂红古卷风主题 ===== */
+    :root {
+      --cinnabar: #C23B22;
+      --cinnabar-light: #E85D4A;
+      --cinnabar-dark: #8B1A1A;
+      --ink-black: #1A1A2E;
+      --ink-gray: #3D3D56;
+      --ink-light: #6B6B80;
+      --paper-white: #F5F0E8;
+      --paper-cream: #EDE5D8;
+      --paper-aged: #D4C9B5;
+      --gold: #C5A55A;
+      --gold-dark: #9A7B3A;
+      --success: #5B8C5A;
+      --info: #4A708B;
+      --faction-taixu: #5B8C8C;
+      --faction-tingyu: #7B68AE;
+      --faction-tieqi: #8B6914;
+      --faction-yaowang: #6B8E23;
+      --faction-fentian: #C23B22;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Source Han Sans SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+      background: var(--paper-white);
+      color: var(--ink-gray);
+      min-height: 100vh;
+    }
+
+    /* ===== 导航标签 ===== */
+    .nav { background: var(--paper-cream); border-bottom: 2px solid var(--paper-aged); padding: 0 24px; display: flex; gap: 0; }
+    .nav-tab { padding: 14px 24px; font-size: 14px; color: var(--ink-light); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; }
+    .nav-tab:hover { color: var(--ink-gray); }
+    .nav-tab.active { color: var(--cinnabar); border-bottom-color: var(--cinnabar); font-weight: 600; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ===== 通用组件 ===== */
+    h2 { font-family: "FZQingKeBenYueSongS-R-GB", "Source Han Serif SC", serif; font-size: 1.5rem; color: var(--ink-black); margin-bottom: 0.5rem; }
+    h3 { font-family: "Source Han Serif SC", serif; font-size: 1.1rem; font-weight: 600; color: var(--ink-black); margin-bottom: 0.25rem; }
+    .subtitle { color: var(--ink-light); margin-bottom: 1.5rem; font-size: 14px; }
+    .section { margin-bottom: 2rem; }
+    .label { font-size: 11px; color: var(--ink-light); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+    .mockup { background: var(--paper-cream); border: 1px solid var(--paper-aged); border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; }
+    .mockup-header { background: var(--paper-aged); padding: 8px 16px; font-size: 12px; color: var(--ink-light); border-bottom: 1px solid var(--paper-aged); }
+    .mockup-body { padding: 24px; }
+    pre { margin: 0; font-family: "Cascadia Code", "Fira Code", monospace; font-size: 13px; line-height: 1.8; }
+    .divider { height: 1px; background: linear-gradient(to right, transparent, var(--ink-light) 30%, var(--ink-gray) 50%, var(--ink-light) 70%, transparent); margin: 24px 0; opacity: 0.5; }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+
+    /* ===== GameScreen 双栏布局 ===== */
+    .game-layout { display: grid; grid-template-columns: 1fr 320px; min-height: 600px; font-size: 14px; border: 2px solid var(--paper-aged); border-radius: 12px; overflow: hidden; }
+    .game-left { border-right: 2px solid var(--paper-aged); display: flex; flex-direction: column; }
+    .game-right { background: var(--paper-cream); padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
+
+    /* 时间轴 */
+    .timeline-bar { background: var(--paper-cream); padding: 12px 20px; border-bottom: 1px solid var(--paper-aged); display: flex; align-items: center; gap: 16px; }
+    .day-label { font-family: "FZQingKeBenYueSongS-R-GB", serif; font-size: 18px; font-weight: 700; color: var(--cinnabar); }
+    .timeslot-group { display: flex; gap: 8px; }
+    .timeslot { padding: 4px 14px; border-radius: 4px; font-size: 12px; }
+    .timeslot.active { background: var(--cinnabar); color: var(--paper-white); font-weight: 600; }
+    .timeslot.inactive { background: var(--paper-aged); color: var(--ink-light); }
+    .stats-quick { margin-left: auto; display: flex; gap: 14px; font-size: 12px; color: var(--ink-light); }
+
+    /* 事件滚动区 */
+    .event-area { flex: 1; padding: 20px 24px; overflow-y: auto; background: var(--paper-white); }
+    .scene-desc { color: var(--ink-light); font-size: 13px; font-style: italic; margin-bottom: 16px; padding-left: 12px; border-left: 2px solid var(--paper-aged); }
+    .dialogue { margin-bottom: 16px; }
+    .dialogue-speaker { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+    .dialogue-text { line-height: 1.8; }
+    .favor-hint { background: var(--paper-cream); border: 1px solid var(--paper-aged); border-radius: 8px; padding: 10px 14px; font-size: 12px; color: var(--ink-light); margin-bottom: 16px; }
+
+    /* 行动面板 */
+    .action-panel { background: var(--paper-cream); border-top: 2px solid var(--paper-aged); padding: 16px 20px; }
+    .action-title { font-size: 11px; color: var(--ink-light); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+    .action-list { display: flex; flex-direction: column; gap: 8px; }
+    .action-btn { padding: 10px 16px; border-radius: 4px; cursor: pointer; font-family: "FZQingKeBenYueSongS-R-GB", serif; font-size: 15px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; border: 2px solid transparent; }
+    .action-btn:hover { transform: rotate(-0.5deg); }
+    .action-btn.primary { background: var(--cinnabar); color: var(--paper-white); border-color: var(--cinnabar-dark); }
+    .action-btn.secondary { background: var(--paper-aged); color: var(--ink-gray); }
+    .action-btn .hint { font-size: 11px; opacity: 0.8; font-family: "Microsoft YaHei", sans-serif; }
+
+    /* 右栏组件 */
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 13px; }
+    .stat-row { display: flex; justify-content: space-between; }
+    .stat-label { color: var(--ink-light); }
+    .stat-val-hp { color: var(--cinnabar-dark); font-family: "EB Garamond", serif; }
+    .stat-val-mp { color: var(--info); font-family: "EB Garamond", serif; }
+    .favor-item { margin-bottom: 8px; }
+    .favor-header { display: flex; justify-content: space-between; margin-bottom: 2px; font-size: 12px; }
+    .favor-bar { height: 4px; background: var(--paper-aged); border-radius: 2px; overflow: hidden; display: flex; }
+    .favor-fill-trust { background: var(--gold); }
+    .favor-fill-intim { background: var(--cinnabar); }
+    .favor-fill-awe { background: var(--info); }
+    .favor-fill-fear { background: var(--ink-black); }
+    .weapon-item { display: flex; justify-content: space-between; font-size: 13px; padding: 2px 0; }
+    .weapon-type { color: var(--ink-light); font-size: 12px; }
+    .empty-slot { text-align: center; color: var(--ink-light); font-size: 12px; padding: 6px; border: 1px dashed var(--paper-aged); border-radius: 4px; }
+
+    /* ===== 架构图 ===== */
+    .arch-flow { font-family: "Cascadia Code", "Fira Code", monospace; font-size: 12px; line-height: 1.6; }
+    .arch-layer { background: var(--paper-cream); border: 1px solid var(--paper-aged); border-radius: 8px; padding: 12px 16px; margin-bottom: 4px; text-align: center; }
+    .arch-arrow { text-align: center; color: var(--ink-light); font-size: 16px; line-height: 1; padding: 2px 0; }
+    .arch-layer-title { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+
+    /* ===== 数据结构 ===== */
+    .json-block { background: var(--ink-black); color: #e0ddd4; padding: 16px 20px; border-radius: 8px; font-family: "Cascadia Code", monospace; font-size: 13px; line-height: 1.7; overflow-x: auto; }
+    .json-key { color: var(--cinnabar-light); }
+    .json-str { color: var(--success); }
+    .json-num { color: var(--gold); }
+    .json-comment { color: var(--ink-light); font-style: italic; }
+    .json-type { color: var(--info); }
+
+    /* ===== 界面切换图 ===== */
+    .screen-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .screen-card { border: 2px solid var(--paper-aged); border-radius: 12px; overflow: hidden; cursor: default; transition: all 0.2s; }
+    .screen-card:hover { border-color: var(--cinnabar); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .screen-preview { background: var(--paper-cream); aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center; padding: 12px; font-size: 11px; color: var(--ink-light); border-bottom: 1px solid var(--paper-aged); }
+    .screen-card-body { padding: 12px 16px; }
+    .screen-card-body h3 { font-size: 14px; margin-bottom: 2px; }
+    .screen-card-body p { font-size: 12px; color: var(--ink-light); }
+
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { padding: 8px 0; border-bottom: 1px solid var(--paper-aged); font-size: 14px; display: flex; gap: 8px; align-items: flex-start; }
+    .checklist li:last-child { border-bottom: none; }
+    .check-icon { color: var(--success); font-weight: 700; flex-shrink: 0; }
+    .warn-icon { color: var(--cinnabar); font-weight: 700; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- 顶部导航 -->
+  <div class="nav">
+    <div class="nav-tab active" onclick="showPage('page-arch')">架构</div>
+    <div class="nav-tab" onclick="showPage('page-ui')">界面</div>
+    <div class="nav-tab" onclick="showPage('page-data')">数据结构</div>
+    <div class="nav-tab" onclick="showPage('page-screens')">页面总览</div>
+    <div class="nav-tab" onclick="showPage('page-status')">完成度</div>
+  </div>
+
+  <!-- ==================== 页面 1：架构 ==================== -->
+  <div id="page-arch" class="page active" style="padding: 32px; max-width: 1100px; margin: 0 auto;">
+    <h2>一念江湖 — 技术架构</h2>
+    <p class="subtitle">React + TypeScript + Vite + Vercel | 桌面端优先 | 数据驱动事件系统</p>
+
+    <div class="section">
+      <h3>项目目录结构</h3>
+      <div class="mockup">
+        <div class="mockup-header">src/ 目录</div>
+        <div class="mockup-body">
+          <pre>
+src/
+├── <span style="color:var(--cinnabar)">main.tsx</span>                  <span style="color:var(--ink-light)"># 入口</span>
+├── <span style="color:var(--cinnabar)">App.tsx</span>                    <span style="color:var(--ink-light)"># 根路由</span>
+│
+├── <span style="color:var(--success)">engine/</span>                    <span style="color:var(--ink-light)"># 核心游戏引擎（纯逻辑，零 UI）</span>
+│   ├── <span style="color:var(--ink-gray)">GameState.ts</span>         <span style="color:var(--ink-light)"># 状态类型定义</span>
+│   ├── <span style="color:var(--ink-gray)">TimeEngine.ts</span>        <span style="color:var(--ink-light)"># 时间推进、时辰判定</span>
+│   ├── <span style="color:var(--ink-gray)">FavorEngine.ts</span>       <span style="color:var(--ink-light)"># 好感度计算（四维模型）</span>
+│   ├── <span style="color:var(--ink-gray)">CombatEngine.ts</span>      <span style="color:var(--ink-light)"># 回合制战斗逻辑</span>
+│   ├── <span style="color:var(--ink-gray)">EventEngine.ts</span>       <span style="color:var(--ink-light)"># 事件触发、条件判定</span>
+│   ├── <span style="color:var(--ink-gray)">EndingEngine.ts</span>      <span style="color:var(--ink-light)"># 结局判定</span>
+│   └── <span style="color:var(--ink-gray)">FlagEngine.ts</span>        <span style="color:var(--ink-light)"># 标记管理</span>
+│
+├── <span style="color:var(--gold)">data/</span>                      <span style="color:var(--ink-light)"># 全部游戏数据（JSON 驱动）</span>
+│   ├── <span style="color:var(--ink-gray)">events/</span>              <span style="color:var(--ink-light)"># 事件脚本（按天数组织）</span>
+│   │   ├── day01.json
+│   │   ├── ...
+│   │   └── day30.json
+│   ├── <span style="color:var(--ink-gray)">npcs.json</span>            <span style="color:var(--ink-light)"># NPC 基础数据</span>
+│   ├── <span style="color:var(--ink-gray)">factions.json</span>        <span style="color:var(--ink-light)"># 门派数据</span>
+│   ├── <span style="color:var(--ink-gray)">martial-arts.json</span>    <span style="color:var(--ink-light)"># 武学数据</span>
+│   ├── <span style="color:var(--ink-gray)">endings.json</span>         <span style="color:var(--ink-light)"># 结局条件</span>
+│   └── <span style="color:var(--ink-gray)">random-events.json</span>   <span style="color:var(--ink-light)"># 随机遭遇池</span>
+│
+├── <span style="color:var(--faction-tingyu)">ui/</span>                        <span style="color:var(--ink-light)"># React 组件</span>
+│   ├── <span style="color:var(--ink-gray)">screens/</span>             <span style="color:var(--ink-light)"># 全屏场景</span>
+│   │   ├── TitleScreen.tsx
+│   │   ├── GameScreen.tsx     <span style="color:var(--ink-light)"># 主游戏界面（双栏布局）</span>
+│   │   ├── CombatScreen.tsx
+│   │   ├── RelationGraph.tsx
+│   │   └── EndingScreen.tsx
+│   ├── <span style="color:var(--ink-gray)">components/</span>          <span style="color:var(--ink-light)"># 可复用组件</span>
+│   │   ├── Timeline.tsx       <span style="color:var(--ink-light)"># 时间轴</span>
+│   │   ├── ActionPanel.tsx    <span style="color:var(--ink-light)"># 行动选择</span>
+│   │   ├── DialogueBox.tsx    <span style="color:var(--ink-light)"># 对话框（逐字打印）</span>
+│   │   ├── FavorDisplay.tsx   <span style="color:var(--ink-light)"># 好感度面板</span>
+│   │   ├── CharSheet.tsx      <span style="color:var(--ink-light)"># 角色属性</span>
+│   │   └── CombatUI.tsx       <span style="color:var(--ink-light)"># 战斗界面</span>
+│   └── <span style="color:var(--ink-gray)">hooks/</span>
+│       ├── useGameState.ts
+│       └── useEventRunner.ts
+│
+├── <span style="color:var(--info)">styles/</span>                    <span style="color:var(--ink-light)"># 古卷风 CSS</span>
+│   ├── variables.css          <span style="color:var(--ink-light)"># 朱砂红色板</span>
+│   ├── scroll-frame.css       <span style="color:var(--ink-light)"># 卷轴边框</span>
+│   ├── animations.css         <span style="color:var(--ink-light)"># 墨迹动效</span>
+│   └── global.css
+│
+├── types/index.ts             <span style="color:var(--ink-light)"># 全局类型</span>
+└── utils/
+    ├── math.ts                <span style="color:var(--ink-light)"># 伤害公式</span>
+    └── condition-parser.ts    <span style="color:var(--ink-light)"># 事件条件解析</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>数据流架构</h3>
+      <div class="mockup">
+        <div class="mockup-header">核心数据流（自上而下）</div>
+        <div class="mockup-body">
+          <div class="arch-flow">
+            <div class="arch-layer" style="border-color: var(--gold);">
+              <div class="arch-layer-title" style="color: var(--gold);">JSON Data Layer</div>
+              <div style="font-size: 12px; color: var(--ink-light);">events/*.json &nbsp; npcs.json &nbsp; martial-arts.json &nbsp; endings.json</div>
+            </div>
+            <div class="arch-arrow">↓ 加载 & 校验</div>
+            <div class="arch-layer" style="border-color: var(--success);">
+              <div class="arch-layer-title" style="color: var(--success);">Engine Layer（纯逻辑）</div>
+              <div style="font-size: 12px; color: var(--ink-light);">TimeEngine → EventEngine → FavorEngine → EndingEngine &nbsp; | &nbsp; CombatEngine &nbsp; | &nbsp; FlagEngine</div>
+            </div>
+            <div class="arch-arrow">↓ 状态更新（immutable）</div>
+            <div class="arch-layer" style="border-color: var(--cinnabar);">
+              <div class="arch-layer-title" style="color: var(--cinnabar);">React State（Zustand）</div>
+              <div style="font-size: 12px; color: var(--ink-light);">GameState { day, timeslot, favors, flags, health, qi, martialArts... }</div>
+            </div>
+            <div class="arch-arrow">↓ useGameState / useEventRunner</div>
+            <div class="arch-layer" style="border-color: var(--faction-tingyu);">
+              <div class="arch-layer-title" style="color: var(--faction-tingyu);">UI Layer（React）</div>
+              <div style="font-size: 12px; color: var(--ink-light);">GameScreen（双栏）&nbsp; | &nbsp; CombatScreen &nbsp; | &nbsp; RelationGraph &nbsp; | &nbsp; EndingScreen</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>技术选型</h3>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+        <div class="mockup" style="margin-bottom: 0;">
+          <div class="mockup-body" style="text-align: center; padding: 16px;">
+            <div style="font-size: 24px; font-weight: 700; color: var(--cinnabar); margin-bottom: 4px;">Vite</div>
+            <div style="font-size: 11px; color: var(--ink-light);">构建 + 开发</div>
+          </div>
+        </div>
+        <div class="mockup" style="margin-bottom: 0;">
+          <div class="mockup-body" style="text-align: center; padding: 16px;">
+            <div style="font-size: 24px; font-weight: 700; color: var(--cinnabar); margin-bottom: 4px;">Zustand</div>
+            <div style="font-size: 11px; color: var(--ink-light);">状态管理</div>
+          </div>
+        </div>
+        <div class="mockup" style="margin-bottom: 0;">
+          <div class="mockup-body" style="text-align: center; padding: 16px;">
+            <div style="font-size: 24px; font-weight: 700; color: var(--success); margin-bottom: 4px;">纯 CSS</div>
+            <div style="font-size: 11px; color: var(--ink-light);">古卷风定制样式</div>
+          </div>
+        </div>
+        <div class="mockup" style="margin-bottom: 0;">
+          <div class="mockup-body" style="text-align: center; padding: 16px;">
+            <div style="font-size: 24px; font-weight: 700; color: var(--info); margin-bottom: 4px;">d3-force</div>
+            <div style="font-size: 11px; color: var(--ink-light);">关系图可视化</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 页面 2：主界面 ==================== -->
+  <div id="page-ui" class="page" style="padding: 32px; max-width: 1200px; margin: 0 auto;">
+    <h2>主游戏界面 — GameScreen</h2>
+    <p class="subtitle">第 10 天 · 午时 · 太虚剑宗密室 — 苏青衡发现清虚真人的密信</p>
+
+    <div class="section">
+      <div class="game-layout">
+        <!-- 左栏 -->
+        <div class="game-left">
+          <!-- 时间轴 -->
+          <div class="timeline-bar">
+            <span class="day-label">第 10 天</span>
+            <div class="timeslot-group">
+              <span class="timeslot inactive">卯</span>
+              <span class="timeslot active">午</span>
+              <span class="timeslot inactive">酉</span>
+              <span class="timeslot inactive">子</span>
+            </div>
+            <div class="stats-quick">
+              <span>♥ 85/100</span>
+              <span>⚡ 60/100</span>
+            </div>
+          </div>
+
+          <!-- 事件区 -->
+          <div class="event-area">
+            <p class="scene-desc">嵩山 · 太虚剑宗密室。烛光摇曳，墙上的画像在暗处注视着你。桌上摊开一封刚被拆开的密信。</p>
+
+            <div class="dialogue">
+              <div class="dialogue-speaker" style="color: var(--faction-taixu);">苏青衡</div>
+              <p class="dialogue-text">师父他……果然和朝廷有来往。这封密信，你觉得我该怎么办？</p>
+            </div>
+
+            <div class="dialogue" style="margin-top: 20px;">
+              <div class="dialogue-speaker" style="color: var(--faction-taixu);">苏青衡</div>
+              <p class="dialogue-text" style="opacity: 0.7;">他若真与朝廷勾结，那太虚剑宗百年清誉……我不能坐视不管。</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="favor-hint">
+              <strong>此选择将影响：</strong>
+              <span style="color: var(--faction-taixu);">苏青衡</span> 的好感度 &nbsp;·&nbsp;
+              <span style="color: var(--faction-taixu);">清虚真人</span> 的好感度
+            </div>
+          </div>
+
+          <!-- 行动面板 -->
+          <div class="action-panel">
+            <div class="action-title">选择你的行动</div>
+            <div class="action-list">
+              <div class="action-btn primary">
+                <span>公开密信，揭露真相</span>
+                <span class="hint">信任↑ 敬畏↓</span>
+              </div>
+              <div class="action-btn secondary">
+                <span>替他隐瞒，维护师门</span>
+                <span class="hint">信任↑ 亲密↓</span>
+              </div>
+              <div class="action-btn secondary">
+                <span>不表态，先去找老魏商议</span>
+                <span class="hint">跳转 · 酉时</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右栏 -->
+        <div class="game-right">
+          <!-- 角色属性 -->
+          <div>
+            <div class="label">无名少侠</div>
+            <div class="stat-grid">
+              <div class="stat-row"><span class="stat-label">生命</span><span class="stat-val-hp">85/100</span></div>
+              <div class="stat-row"><span class="stat-label">气力</span><span class="stat-val-mp">60/100</span></div>
+              <div class="stat-row"><span class="stat-label">攻击</span><span>18</span></div>
+              <div class="stat-row"><span class="stat-label">防御</span><span>12</span></div>
+            </div>
+          </div>
+          <div class="divider" style="margin: 0;"></div>
+
+          <!-- 装备武学 -->
+          <div>
+            <div class="label">装备武学</div>
+            <div class="weapon-item"><span style="color: var(--faction-taixu);">太虚十三剑</span><span class="weapon-type">剑 · 攻</span></div>
+            <div class="weapon-item"><span style="color: var(--faction-taixu);">剑气如虹</span><span class="weapon-type">剑 · 防</span></div>
+            <div class="weapon-item"><span style="color: var(--faction-tingyu);">听雨十八拍</span><span class="weapon-type">气 · 攻</span></div>
+            <div class="empty-slot">+ 空槽位</div>
+          </div>
+          <div class="divider" style="margin: 0;"></div>
+
+          <!-- NPC 好感度 -->
+          <div style="flex: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="label" style="margin-bottom: 0;">江湖关系</span>
+              <span style="font-size: 11px; color: var(--cinnabar); cursor: pointer;">关系图 →</span>
+            </div>
+            <div style="margin-top: 8px;">
+              <div class="favor-item">
+                <div class="favor-header">
+                  <span style="color: var(--faction-taixu);">苏青衡</span>
+                  <span style="color: var(--ink-light);">信 50</span>
+                </div>
+                <div class="favor-bar"><div class="favor-fill-trust" style="width: 50%;"></div></div>
+              </div>
+              <div class="favor-item">
+                <div class="favor-header">
+                  <span style="color: var(--faction-tingyu);">沈听雨</span>
+                  <span style="color: var(--ink-light);">信 20 · 敬 45</span>
+                </div>
+                <div class="favor-bar">
+                  <div class="favor-fill-trust" style="width: 20%;"></div>
+                  <div class="favor-fill-awe" style="width: 25%;"></div>
+                </div>
+              </div>
+              <div class="favor-item">
+                <div class="favor-header">
+                  <span style="color: var(--faction-fentian);">厉无双</span>
+                  <span style="color: var(--ink-light);">敬 60 · 怖 50</span>
+                </div>
+                <div class="favor-bar">
+                  <div class="favor-fill-awe" style="width: 60%;"></div>
+                  <div class="favor-fill-fear" style="width: 50%;"></div>
+                </div>
+              </div>
+              <div class="favor-item">
+                <div class="favor-header">
+                  <span style="color: var(--faction-tieqi);">萧破敌</span>
+                  <span style="color: var(--ink-light);">信 35 · 亲 20</span>
+                </div>
+                <div class="favor-bar">
+                  <div class="favor-fill-trust" style="width: 35%;"></div>
+                  <div class="favor-fill-intim" style="width: 20%;"></div>
+                </div>
+              </div>
+              <div style="text-align: center; color: var(--ink-light); font-size: 11px; padding-top: 4px;">··· 展开全部 12 位 NPC</div>
+            </div>
+          </div>
+          <div class="divider" style="margin: 0;"></div>
+
+          <!-- 门派声望 -->
+          <div>
+            <div class="label">门派声望</div>
+            <div style="font-size: 12px;">
+              <div class="stat-row" style="padding: 2px 0;"><span style="color: var(--faction-taixu);">太虚剑宗</span><span>65</span></div>
+              <div class="stat-row" style="padding: 2px 0;"><span style="color: var(--faction-tieqi);">铁骑营</span><span>40</span></div>
+              <div class="stat-row" style="padding: 2px 0;"><span style="color: var(--faction-fentian);">焚天教</span><span style="color: var(--cinnabar);">15</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 页面 3：数据结构 ==================== -->
+  <div id="page-data" class="page" style="padding: 32px; max-width: 1100px; margin: 0 auto;">
+    <h2>事件脚本数据结构</h2>
+    <p class="subtitle">JSON 驱动 | 每天一个文件 | 引擎解析触发条件并执行效果</p>
+
+    <div class="section">
+      <h3>事件脚本格式（day01.json 示例）</h3>
+      <div class="json-block">
+<span class="json-comment">// day01.json — 第 1 天全部事件</span>
+{
+  <span class="json-key">"day"</span>: <span class="json-num">1</span>,
+  <span class="json-key">"events"</span>: [
+    {
+      <span class="json-key">"id"</span>: <span class="json-str">"day01_arrival"</span>,
+      <span class="json-key">"type"</span>: <span class="json-str">"story"</span>,
+      <span class="json-key">"trigger"</span>: {
+        <span class="json-key">"timeslot"</span>: <span class="json-str">"dawn"</span>,
+        <span class="json-key">"location"</span>: <span class="json-str">"zhongyuan"</span>,
+        <span class="json-key">"conditions"</span>: []
+      },
+      <span class="json-key">"scene"</span>: {
+        <span class="json-key">"background"</span>: <span class="json-str">"zhongyuan_mountain"</span>,
+        <span class="json-key">"description"</span>: <span class="json-str">"清晨的嵩山古道，薄雾未散……"</span>,
+        <span class="json-key">"ambient"</span>: <span class="json-str">"morning_birds"</span>
+      },
+      <span class="json-key">"dialogues"</span>: [
+        {
+          <span class="json-key">"speaker"</span>: <span class="json-str">"narrator"</span>,
+          <span class="json-key">"text"</span>: <span class="json-str">"你背着行囊，踏上了嵩山古道。"</span>
+        },
+        {
+          <span class="json-key">"speaker"</span>: <span class="json-str">"old_wei"</span>,
+          <span class="json-key">"text"</span>: <span class="json-str">"年轻人，第一次来嵩山？"</span>,
+          <span class="json-key">"emotion"</span>: <span class="json-str">"smile"</span>
+        }
+      ],
+      <span class="json-key">"choices"</span>: [
+        {
+          <span class="json-key">"id"</span>: <span class="json-str">"friendly"</span>,
+          <span class="json-key">"text"</span>: <span class="json-str">"「是，前辈。请指路。」"</span>,
+          <span class="json-key">"effects"</span>: [
+            { <span class="json-key">"type"</span>: <span class="json-str">"favor"</span>, <span class="json-key">"npc"</span>: <span class="json-str">"old_wei"</span>,
+              <span class="json-key">"trust"</span>: <span class="json-num">+5</span>, <span class="json-key">"intimacy"</span>: <span class="json-num">+3</span> },
+            { <span class="json-key">"type"</span>: <span class="json-str">"flag"</span>, <span class="json-key">"key"</span>: <span class="json-str">"wei_friendly_intro"</span> }
+          ]
+        },
+        {
+          <span class="json-key">"id"</span>: <span class="json-str">"aloof"</span>,
+          <span class="json-key">"text"</span>: <span class="json-str">"「不用了，我自己能找到。」"</span>,
+          <span class="json-key">"effects"</span>: [
+            { <span class="json-key">"type"</span>: <span class="json-str">"favor"</span>, <span class="json-key">"npc"</span>: <span class="json-str">"old_wei"</span>,
+              <span class="json-key">"awe"</span>: <span class="json-num">+5</span>, <span class="json-key">"trust"</span>: <span class="json-num">-3</span> }
+          ]
+        },
+        {
+          <span class="json-key">"id"</span>: <span class="json-str">"curious"</span>,
+          <span class="json-key">"text"</span>: <span class="json-str">"「前辈看起来不像普通人。」"</span>,
+          <span class="json-key">"conditions"</span>: [
+            { <span class="json-key">"type"</span>: <span class="json-str">"flag"</span>, <span class="json-key">"key"</span>: <span class="json-str">"wei_friendly_intro"</span> }
+          ],
+          <span class="json-key">"effects"</span>: [
+            { <span class="json-key">"type"</span>: <span class="json-str">"favor"</span>, <span class="json-key">"npc"</span>: <span class="json-str">"old_wei"</span>,
+              <span class="json-key">"trust"</span>: <span class="json-num">+8</span>, <span class="json-key">"awe"</span>: <span class="json-num">+3</span> },
+            { <span class="json-key">"type"</span>: <span class="json-str">"unlock"</span>, <span class="json-key">"what"</span>: <span class="json-str">"old_wei_identity_hint"</span> }
+          ]
+        }
+      ]
+    }
+  ]
+}
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>GameState 类型定义</h3>
+      <div class="json-block">
+<span class="json-key">interface</span> <span class="json-type">GameState</span> {
+  <span class="json-key">currentDay</span>: <span class="json-type">number</span>;              <span class="json-comment">// 1-30</span>
+  <span class="json-key">currentTimeslot</span>: <span class="json-type">Timeslot</span>;       <span class="json-comment">// "dawn" | "noon" | "dusk" | "night"</span>
+  <span class="json-key">currentLocation</span>: <span class="json-type">Location</span>;       <span class="json-comment">// 五大地理区域之一</span>
+
+  <span class="json-key">health</span>: <span class="json-type">number</span>;                  <span class="json-comment">// 生命值</span>
+  <span class="json-key">maxHealth</span>: <span class="json-type">number</span>;               <span class="json-comment">// 生命上限</span>
+  <span class="json-key">qi</span>: <span class="json-type">number</span>;                      <span class="json-comment">// 气力</span>
+  <span class="json-key">maxQi</span>: <span class="json-type">number</span>;                   <span class="json-comment">// 气力上限</span>
+  <span class="json-key">attack</span>: <span class="json-type">number</span>;
+  <span class="json-key">defense</span>: <span class="json-type">number</span>;
+  <span class="json-key">speed</span>: <span class="json-type">number</span>;
+
+  <span class="json-key">npcFavors</span>: <span class="json-type">Map&lt;NPC_ID, FavorDims&gt;</span>;  <span class="json-comment">// 四维好感度</span>
+  <span class="json-key">factionReputation</span>: <span class="json-type">Map&lt;Faction_ID, number&gt;</span>;  <span class="json-comment">// 0-100</span>
+  <span class="json-key">learnedMartialArts</span>: <span class="json-type">MartialArt[]</span>;
+  <span class="json-key">equippedSkills</span>: <span class="json-type">MartialArt[4]</span>;
+
+  <span class="json-key">flags</span>: <span class="json-type">Set&lt;string&gt;</span>;              <span class="json-comment">// 关键抉择标记</span>
+  <span class="json-key">endingsUnlocked</span>: <span class="json-type">Ending[]</span>;
+  <span class="json-key">isSecondPlaythrough</span>: <span class="json-type">boolean</span>;   <span class="json-comment">// 二周目</span>
+}
+
+<span class="json-key">interface</span> <span class="json-type">FavorDims</span> {
+  <span class="json-key">trust</span>: <span class="json-type">number</span>;    <span class="json-comment">// 信任 0-100</span>
+  <span class="json-key">intimacy</span>: <span class="json-type">number</span>; <span class="json-comment">// 亲密 0-100</span>
+  <span class="json-key">awe</span>: <span class="json-type">number</span>;      <span class="json-comment">// 敬畏 0-100</span>
+  <span class="json-key">fear</span>: <span class="json-type">number</span>;     <span class="json-comment">// 忌惮 0-100</span>
+}
+
+<span class="json-key">type</span> <span class="json-type">Timeslot</span> = <span class="json-str">"dawn"</span> | <span class="json-str">"noon"</span> | <span class="json-str">"dusk"</span> | <span class="json-str">"night"</span>;
+<span class="json-key">type</span> <span class="json-type">Location</span> = <span class="json-str">"zhongyuan"</span> | <span class="json-str">"jiangnan"</span> | <span class="json-str">"saibei"</span> | <span class="json-str">"shuzhong"</span> | <span class="json-str">"xiyu"</span>;
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 页面 4：页面总览 ==================== -->
+  <div id="page-screens" class="page" style="padding: 32px; max-width: 1100px; margin: 0 auto;">
+    <h2>全部页面一览</h2>
+    <p class="subtitle">5 个核心场景 + 1 个弹窗组件</p>
+
+    <div class="section">
+      <div class="screen-grid">
+        <div class="screen-card">
+          <div class="screen-preview" style="background: var(--ink-black);">
+            <div style="text-align: center;">
+              <div style="font-family: serif; font-size: 28px; color: var(--gold); font-weight: 700; letter-spacing: 4px;">一念江湖</div>
+              <div style="font-size: 10px; color: var(--ink-light); margin-top: 8px;">[ 开始游戏 ] [ 结局回顾 ]</div>
+            </div>
+          </div>
+          <div class="screen-card-body">
+            <h3>TitleScreen</h3>
+            <p>主标题 + 开始游戏 / 结局回顾。朱砂红底，水墨动画。</p>
+          </div>
+        </div>
+
+        <div class="screen-card" style="border-color: var(--cinnabar);">
+          <div class="screen-preview" style="background: var(--paper-white);">
+            <div style="width: 100%; display: grid; grid-template-columns: 1fr 80px; gap: 4px; font-size: 9px;">
+              <div style="border: 1px solid var(--paper-aged); padding: 4px; border-radius: 2px;">事件+对话</div>
+              <div style="border: 1px solid var(--paper-aged); padding: 4px; border-radius: 2px; font-size: 7px;">属性面板</div>
+              <div style="grid-column: 1/3; border: 1px solid var(--cinnabar); padding: 3px; border-radius: 2px; text-align: center; color: var(--cinnabar);">行动选择</div>
+            </div>
+          </div>
+          <div class="screen-card-body">
+            <h3>GameScreen <span class="tag" style="background: var(--cinnabar); color: white;">核心</span></h3>
+            <p>双栏布局：左=事件+行动 | 右=属性/好感度/声望。120 个时辰的主要交互界面。</p>
+          </div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-preview" style="background: var(--paper-cream);">
+            <div style="text-align: center; font-size: 10px; color: var(--ink-gray);">
+              <div style="font-size: 18px;">⚔️</div>
+              <div>回合制战斗</div>
+              <div style="font-size: 8px; color: var(--ink-light); margin-top: 4px;">武学 · 防御 · 道具 · 逃跑</div>
+            </div>
+          </div>
+          <div class="screen-card-body">
+            <h3>CombatScreen</h3>
+            <p>回合制战斗界面。速度排序、武学选择、伤害数字动画。支持 4 种战斗类型。</p>
+          </div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-preview" style="background: var(--paper-white);">
+            <div style="text-align: center; font-size: 10px; color: var(--ink-gray);">
+              <div style="width: 100px; height: 60px; border: 1px solid var(--paper-aged); border-radius: 50%; margin: 0 auto; position: relative;">
+                <div style="width: 8px; height: 8px; background: var(--faction-taixu); border-radius: 50%; position: absolute; top: 10px; left: 30px;"></div>
+                <div style="width: 8px; height: 8px; background: var(--faction-tingyu); border-radius: 50%; position: absolute; top: 25px; right: 15px;"></div>
+                <div style="width: 8px; height: 8px; background: var(--faction-fentian); border-radius: 50%; position: absolute; bottom: 10px; left: 45px;"></div>
+                <div style="width: 12px; height: 12px; background: var(--gold); border-radius: 50%; position: absolute; top: 22px; left: 44px; border: 2px solid var(--cinnabar);"></div>
+              </div>
+              <div style="margin-top: 4px;">力导向关系图</div>
+            </div>
+          </div>
+          <div class="screen-card-body">
+            <h3>RelationGraph</h3>
+            <p>d3-force 力导向图。13 节点（玩家+12 NPC），连线表示关系。可点击查看详情。</p>
+          </div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-preview" style="background: var(--paper-cream);">
+            <div style="text-align: center; font-size: 10px; color: var(--ink-gray);">
+              <div style="font-family: serif; font-size: 14px; color: var(--cinnabar); font-style: italic;">「一念起，万水千山」</div>
+              <div style="font-size: 8px; color: var(--ink-light); margin-top: 6px;">结局画面 + 诗意结语</div>
+            </div>
+          </div>
+          <div class="screen-card-body">
+            <h3>EndingScreen</h3>
+            <p>结局展示。水墨渐隐动画 + 诗意结语 + 结局收集状态。7 种结局各有独立画面。</p>
+          </div>
+        </div>
+
+        <div class="screen-card">
+          <div class="screen-preview" style="background: var(--paper-cream);">
+            <div style="text-align: center; font-size: 10px; color: var(--ink-gray);">
+              <div style="width: 60px; height: 40px; border: 2px solid var(--paper-aged); border-radius: 8px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: var(--paper-white);">
+                <span style="font-size: 8px;">NPC 详情</span>
+              </div>
+              <div style="font-size: 8px; color: var(--ink-light); margin-top: 4px;">弹窗覆盖层</div>
+            </div>
+          </div>
+          <div class="screen-card-body">
+            <h3>NpcDetailModal</h3>
+            <p>点击 NPC 弹出详情。四维好感度雷达图 + 剧情线索 + 已触发事件记录。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 页面 5：完成度 ==================== -->
+  <div id="page-status" class="page" style="padding: 32px; max-width: 900px; margin: 0 auto;">
+    <h2>设计文档完成度</h2>
+    <p class="subtitle">现有设计 vs 开发所需</p>
+
+    <div class="section">
+      <div class="mockup">
+        <div class="mockup-header">设计文档覆盖情况</div>
+        <div class="mockup-body">
+          <ul class="checklist">
+            <li><span class="check-icon">✔</span><div><strong>世界观 (00)</strong> — 时代背景、五大地理、势力格局、时间线结构。<span style="color: var(--success);">完整。</span></div></li>
+            <li><span class="check-icon">✔</span><div><strong>门派武学 (01)</strong> — 5 大门派定位 + 20 招武学详细数据 + 属性克制 + 气力系统。<span style="color: var(--success);">完整。</span></div></li>
+            <li><span class="check-icon">✔</span><div><strong>NPC 名册 (02)</strong> — 12 NPC 四维初始好感度 + 剧情线 + 关键抉择 + 隐藏关系网。<span style="color: var(--success);">完整。</span></div></li>
+            <li><span class="check-icon">✔</span><div><strong>结局系统 (03)</strong> — 7 种结局触发条件 + 优先级 + 互斥关系。<span style="color: var(--success);">完整。</span></div></li>
+            <li><span class="check-icon">✔</span><div><strong>美术风格 (04)</strong> — 色板、字体、CSS 变量、UI 组件、动效规范。<span style="color: var(--success);">完整。</span></div></li>
+            <li><span class="check-icon">✔</span><div><strong>系统概览 (05)</strong> — 时间/好感度/战斗/关系图/存档系统规则。<span style="color: var(--success);">完整。</span></div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="mockup">
+        <div class="mockup-header">本次补充的技术设计</div>
+        <div class="mockup-body">
+          <ul class="checklist">
+            <li><span class="check-icon">✔</span><div><strong>技术架构</strong> — React + TS + Vite + Zustand + d3-force。分层：Data → Engine → State → UI。<span style="color: var(--success);">已确认。</span></div></li>
+            <li><span class="check-icon">✔</span><div><strong>目录结构</strong> — engine/ + data/ + ui/ + styles/ + types/ + utils/。<span style="color: var(--success);">已确认。</span></div></li>
+            <li><span class="check-icon">✔</span><div><strong>界面设计</strong> — GameScreen 双栏布局原型 + 全部 5 屏幕概览。<span style="color: var(--success);">已确认。</span></div></li>
+            <li><span class="check-icon">✔</span><div><strong>数据结构</strong> — 事件脚本 JSON 格式 + GameState TypeScript 类型定义。<span style="color: var(--success);">已确认。</span></div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="mockup">
+        <div class="mockup-header">尚待填充的内容（开发过程中逐步补充）</div>
+        <div class="mockup-body">
+          <ul class="checklist">
+            <li><span class="warn-icon">●</span><div><strong>事件脚本内容</strong> — 30 天 × 4 时辰 × 多个事件 = 数百个 JSON 脚本。设计格式已定，内容需逐天编写。</div></li>
+            <li><span class="warn-icon">●</span><div><strong>随机事件池</strong> — 各地区随机遭遇事件的设计（战斗/奇遇/情报）。</div></li>
+            <li><span class="warn-icon">●</span><div><strong>战斗数值平衡</strong> — 20 招武学的具体伤害系数、冷却回合等微调数据。</div></li>
+            <li><span class="warn-icon">●</span><div><strong>道具系统</strong> — 消耗品、装备等（现有设计未涉及，可在后期版本迭代）。</div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>
