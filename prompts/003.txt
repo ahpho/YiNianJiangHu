@@ -1,0 +1,25 @@
+  当前状态
+
+  设计文档 + 实现计划：全部完成 ✅
+
+  代码实现：尚未开始（0/49 Tasks）
+
+  ---
+  下一步
+
+  实现计划已保存在 docs/IMPLEMENTATION_PLAN.md（索引页），分为 4 个文件：
+
+  1. docs/superpowers/plans/phase-1-2-implementation.md
+  2. docs/superpowers/plans/phase-3-4-implementation.md
+  3. docs/plans/05-integration-polish.md
+  4. docs/plans/06-deploy-launch.md
+
+  如果你想继续，请选择执行方式：
+
+  方式 1：子代理驱动（推荐） — 每个 Task 调度新子代理 + 两阶段审查
+  - 适用：想快速推进，不需要人工审查每一步
+
+  方式 2：内联执行 — 当前会话内批量执行 + 检查点
+  - 适用：想深度参与每一步，看到每段代码
+
+  告诉我你想怎么做，我立刻开始。
