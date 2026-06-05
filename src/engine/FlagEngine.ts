@@ -16,7 +16,7 @@ export const FlagEngine = {
     return next;
   },
 
-  clearFlags(flags: Set<string>): Set<string> {
+  clearFlags(_flags: Set<string>): Set<string> {
     return new Set<string>();
   },
 

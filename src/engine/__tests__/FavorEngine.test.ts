@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { FavorEngine } from '../FavorEngine';
 import type { NPC_Favor, NPC_ID } from '../types';
 
