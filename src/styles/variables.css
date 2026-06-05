@@ -1,0 +1,43 @@
+/* 主色 — 朱砂红系 */
+:root {
+  --cinnabar: #c23b22;
+  --cinnabar-light: #e85d4a;
+  --cinnabar-dark: #8b1a1a;
+
+  /* 墨色系 */
+  --ink-black: #1a1a2e;
+  --ink-gray: #3d3d56;
+  --ink-light: #6b6b80;
+
+  /* 纸色系 */
+  --paper-white: #f5f0e8;
+  --paper-cream: #ede5d8;
+  --paper-aged: #d4c9b5;
+
+  /* 金属色 — 鎏金 */
+  --gold: #c5a55a;
+  --gold-light: #dbc07a;
+  --gold-dark: #9a7b3a;
+
+  /* 功能色 */
+  --success: #5b8c5a;
+  --danger: #8b1a1a;
+  --info: #4a708b;
+
+  /* 门派色 */
+  --faction-taixu: #5b8c8c;
+  --faction-tingyu: #7b68ae;
+  --faction-tieqi: #8b6914;
+  --faction-yaowang: #6b8e23;
+  --faction-fentian: #c23b22;
+
+  /* 阴影 */
+  --shadow-ink: rgba(26, 26, 46, 0.15);
+  --shadow-gold: rgba(197, 165, 90, 0.2);
+
+  /* 好感度四维色 */
+  --favor-trust: var(--gold);
+  --favor-intimacy: var(--cinnabar);
+  --favor-awe: var(--info);
+  --favor-fear: var(--ink-black);
+}

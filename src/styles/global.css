@@ -1,0 +1,55 @@
+@import './variables.css';
+@import './typography.css';
+@import './scroll-frame.css';
+@import './animations.css';
+
+/* CSS Reset */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Source Han Sans SC', 'Noto Sans CJK SC', 'Microsoft YaHei',
+    sans-serif;
+  background-color: var(--paper-white);
+  color: var(--ink-gray);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: var(--cinnabar);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--cinnabar-light);
+}
+
+/* 滚动条样式（Webkit） */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--paper-cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--paper-aged);
+  border-radius: 3px;
+}

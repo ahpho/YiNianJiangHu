@@ -1,0 +1,94 @@
+/* 卷轴边框 */
+.scroll-frame {
+  background: var(--paper-cream);
+  border: 2px solid var(--paper-aged);
+  border-image: linear-gradient(
+      to bottom,
+      var(--gold-dark),
+      var(--paper-aged) 10%,
+      var(--paper-aged) 90%,
+      var(--gold-dark)
+    )
+    1;
+  padding: 24px 32px;
+  position: relative;
+}
+
+.scroll-frame::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 20px;
+  right: 20px;
+  height: 8px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  border-radius: 50%;
+}
+
+/* 印章式按钮 */
+.btn-seal {
+  background: var(--cinnabar);
+  color: var(--paper-white);
+  font-family: 'FZQingKeBenYueSongS-R-GB', serif;
+  font-size: 16px;
+  padding: 8px 24px;
+  border: 2px solid var(--cinnabar-dark);
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-seal:hover {
+  background: var(--cinnabar-light);
+  transform: rotate(-1deg);
+  box-shadow: var(--shadow-gold);
+}
+
+.btn-seal:active {
+  transform: rotate(1deg) scale(0.97);
+}
+
+/* 墨迹分割线 */
+.divider-ink {
+  border: none;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--ink-light) 15%,
+    var(--ink-gray) 50%,
+    var(--ink-light) 85%,
+    transparent 100%
+  );
+  margin: 24px 0;
+  opacity: 0.6;
+}
+
+/* 好感度进度条 */
+.favor-bar {
+  height: 8px;
+  background: var(--paper-aged);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.favor-bar-fill {
+  height: 100%;
+  transition: width 0.5s ease;
+}
+
+.favor-trust .favor-bar-fill {
+  background: var(--favor-trust);
+}
+
+.favor-intimacy .favor-bar-fill {
+  background: var(--favor-intimacy);
+}
+
+.favor-awe .favor-bar-fill {
+  background: var(--favor-awe);
+}
+
+.favor-fear .favor-bar-fill {
+  background: var(--favor-fear);
+}

@@ -1,0 +1,69 @@
+/* 页面切换 — 墨水晕染展开 */
+@keyframes ink-spread {
+  from {
+    clip-path: circle(0% at 50% 50%);
+    opacity: 0;
+  }
+  to {
+    clip-path: circle(100% at 50% 50%);
+    opacity: 1;
+  }
+}
+
+.animate-ink-spread {
+  animation: ink-spread 0.4s ease-out forwards;
+}
+
+/* 好感度变化 — 数值闪烁 */
+@keyframes favor-flash {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.animate-favor-flash {
+  animation: favor-flash 0.3s ease-in-out;
+}
+
+/* 结局画面 — 水墨渐隐至白 */
+@keyframes ink-fade-to-white {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    filter: brightness(2);
+  }
+}
+
+.animate-ink-fade {
+  animation: ink-fade-to-white 2s ease-in forwards;
+}
+
+/* 逐字打印容器 */
+.typewriter-container {
+  display: inline;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: var(--ink-black);
+  margin-left: 2px;
+  animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
