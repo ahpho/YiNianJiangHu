@@ -1,0 +1,14 @@
+{
+  "suqingheng": { "name": "苏青衡", "title": "青锋", "faction": "taixu", "gender": "male", "age": 22, "initialFavor": { "trust": 50, "intimacy": 30, "awe": 20, "fear": 5 }, "portrait": "suqingheng.png" },
+  "qingxuzhenren": { "name": "清虚真人", "title": "松下鹤", "faction": "taixu", "gender": "male", "age": 58, "initialFavor": { "trust": 40, "intimacy": 10, "awe": 50, "fear": 15 }, "portrait": "qingxuzhenren.png" },
+  "shentingyu": { "name": "沈听雨", "title": "烟雨楼主", "faction": "tingyu", "gender": "female", "age": 35, "initialFavor": { "trust": 20, "intimacy": 10, "awe": 45, "fear": 40 }, "portrait": "shentingyu.png" },
+  "luxiaoman": { "name": "陆小满", "title": "小满", "faction": "tingyu", "gender": "female", "age": 17, "initialFavor": { "trust": 55, "intimacy": 60, "awe": 5, "fear": 0 }, "portrait": "luxiaoman.png" },
+  "xiaopodi": { "name": "萧破敌", "title": "铁壁", "faction": "tieqi", "gender": "male", "age": 42, "initialFavor": { "trust": 35, "intimacy": 20, "awe": 30, "fear": 10 }, "portrait": "xiaopodi.png" },
+  "ayiguli": { "name": "阿依古丽", "title": "小刀", "faction": "tieqi", "gender": "female", "age": 19, "initialFavor": { "trust": 45, "intimacy": 40, "awe": 10, "fear": 5 }, "portrait": "ayiguli.png" },
+  "baiyaoxian": { "name": "白药仙", "title": "药仙", "faction": "yaowang", "gender": "female", "age": 48, "initialFavor": { "trust": 25, "intimacy": 15, "awe": 40, "fear": 30 }, "portrait": "baiyaoxian.png" },
+  "liusuifeng": { "name": "柳随风", "title": "药童", "faction": "yaowang", "gender": "male", "age": 20, "initialFavor": { "trust": 60, "intimacy": 45, "awe": 10, "fear": 0 }, "portrait": "liusuifeng.png" },
+  "liwushuang": { "name": "厉无双", "title": "焚天", "faction": "fentian", "gender": "male", "age": 45, "initialFavor": { "trust": 10, "intimacy": 5, "awe": 60, "fear": 50 }, "portrait": "liwushuang.png" },
+  "huochangqing": { "name": "霍长青", "title": "鬼面", "faction": "fentian", "gender": "male", "age": 30, "initialFavor": { "trust": 5, "intimacy": 5, "awe": 35, "fear": 55 }, "portrait": "huochangqing.png" },
+  "chubaiyi": { "name": "楚白衣", "title": "白衣剑", "faction": "taixu", "gender": "male", "age": 28, "initialFavor": { "trust": 50, "intimacy": 35, "awe": 25, "fear": 10 }, "portrait": "chubaiyi.png" },
+  "laowei": { "name": "老魏", "title": "万事通", "faction": "taixu", "gender": "male", "age": 65, "initialFavor": { "trust": 30, "intimacy": 20, "awe": 15, "fear": 20 }, "portrait": "laowei.png" }
+}

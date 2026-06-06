@@ -1,0 +1,7 @@
+{
+  "taixu": { "name": "太虚剑宗", "description": "嵩山之巅，千年古刹旁立。太虚剑宗以'剑道即天道'为训，门人刚正不阿，是武林盟的核心力量。", "location": "zhongyuan", "element": "sword", "leader": "qingxuzhenren", "style": "以剑为主，一剑破万法，大开大合，以攻代守。" },
+  "tingyu": { "name": "听雨阁", "description": "江南水乡深处，听雨阁表面是文人诗社，实则是江湖最大的情报网络。", "location": "jiangnan", "element": "qi", "leader": "shentingyu", "style": "以气为主，配合暗器，灵巧诡变，擅长控制和消耗。" },
+  "tieqi": { "name": "铁骑营", "description": "塞北边关，铁骑营是退役边军组成的武力集团，以军阵之法融入武学。", "location": "saibei", "element": "fist", "leader": "xiaopodi", "style": "以拳为主，刚猛近战，力大砖飞，血厚防高。" },
+  "yaowang": { "name": "药王谷", "description": "蜀中深山，药王谷世代行医，谷中遍布奇花异草。医毒同源，毒术冠绝天下。", "location": "shuzhong", "element": "poison", "leader": "baiyaoxian", "style": "以毒为主，持续伤害，兼有治疗辅助，最擅长消耗战。" },
+  "fentian": { "name": "焚天教", "description": "西域黄沙深处，焚天教被中原视为魔教，实则是百年前被灭门的忠良之后的避难所。", "location": "xiyu", "element": "mixed", "leader": "liwushuang", "style": "混合属性，追求极致伤害，高风险高回报的玻璃大炮。" }
+}

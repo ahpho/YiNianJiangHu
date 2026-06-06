@@ -1,0 +1,22 @@
+{
+  "taixu_13_swords": { "name": "太虚十三剑", "faction": "taixu", "element": "sword", "type": "attack", "target": "single", "baseDamage": 25, "qiCost": 30, "effect": null, "unlockCondition": null },
+  "taixu_10000_swords": { "name": "万剑归宗", "faction": "taixu", "element": "sword", "type": "attack", "target": "all", "baseDamage": 18, "qiCost": 45, "effect": null, "unlockCondition": "taixu_trust_60" },
+  "taixu_sword_qi": { "name": "剑气如虹", "faction": "taixu", "element": "sword", "type": "defense", "target": "self", "baseDamage": 15, "qiCost": 20, "effect": "reflect_30_percent", "unlockCondition": null },
+  "taixu_heaven_man": { "name": "天人合一", "faction": "taixu", "element": "sword", "type": "ultimate", "target": "single", "baseDamage": 80, "qiCost": 100, "effect": "ignore_defense", "unlockCondition": "complete_taixu_main" },
+  "tingyu_18_pai": { "name": "听雨十八拍", "faction": "tingyu", "element": "qi", "type": "attack", "target": "single", "baseDamage": 18, "qiCost": 25, "effect": "slow_20_percent_2_turns", "unlockCondition": null },
+  "tingyu_misty_rain": { "name": "烟雨朦胧", "faction": "tingyu", "element": "qi", "type": "support", "target": "all", "baseDamage": 0, "qiCost": 35, "effect": "blind_30_percent_3_turns", "unlockCondition": null },
+  "tingyu_hidden_fragrance": { "name": "暗香疏影", "faction": "tingyu", "element": "qi", "type": "attack", "target": "single", "baseDamage": 15, "qiCost": 30, "effect": "steal_buff", "unlockCondition": "tingyu_intimacy_50" },
+  "tingyu_silence": { "name": "万籁俱寂", "faction": "tingyu", "element": "qi", "type": "ultimate", "target": "single", "baseDamage": 60, "qiCost": 100, "effect": "seal_1_turn", "unlockCondition": "complete_tingyu_main" },
+  "tieqi_cavalry": { "name": "铁骑冲阵", "faction": "tieqi", "element": "fist", "type": "attack", "target": "all", "baseDamage": 16, "qiCost": 35, "effect": null, "unlockCondition": null },
+  "tieqi_iron_wall": { "name": "铜墙铁壁", "faction": "tieqi", "element": "fist", "type": "defense", "target": "self", "baseDamage": 0, "qiCost": 25, "effect": "absorb_50_percent_2_turns", "unlockCondition": null },
+  "tieqi_break_army": { "name": "破军一击", "faction": "tieqi", "element": "fist", "type": "attack", "target": "single", "baseDamage": 35, "qiCost": 40, "effect": "execute_if_below_30_percent", "unlockCondition": "tieqi_awe_60" },
+  "tieqi_horse_silence": { "name": "万马齐喑", "faction": "tieqi", "element": "fist", "type": "ultimate", "target": "all", "baseDamage": 65, "qiCost": 100, "effect": "silence_ultimate_2_turns", "unlockCondition": "complete_tieqi_main" },
+  "yaowang_herb": { "name": "百草经", "faction": "yaowang", "element": "poison", "type": "support", "target": "self", "baseDamage": -30, "qiCost": 20, "effect": "heal_30_percent", "unlockCondition": null },
+  "yaowang_corrode": { "name": "化骨绵掌", "faction": "yaowang", "element": "poison", "type": "attack", "target": "single", "baseDamage": 15, "qiCost": 30, "effect": "dot_10_percent_3_turns", "unlockCondition": null },
+  "yaowang_poison_cure": { "name": "以毒攻毒", "faction": "yaowang", "element": "poison", "type": "support", "target": "all", "baseDamage": -10, "qiCost": 35, "effect": "cleanse_and_heal", "unlockCondition": "yaowang_intimacy_50" },
+  "yaowang_no_cure": { "name": "天下无解", "faction": "yaowang", "element": "poison", "type": "ultimate", "target": "single", "baseDamage": 70, "qiCost": 100, "effect": "anti_heal_permanent", "unlockCondition": "complete_yaowang_main" },
+  "fentian_sword": { "name": "焚天剑诀", "faction": "fentian", "element": "sword", "type": "attack", "target": "single", "baseDamage": 30, "qiCost": 35, "effect": "mixed_sword_qi", "unlockCondition": null },
+  "fentian_rebirth": { "name": "浴火重生", "faction": "fentian", "element": "sword", "type": "defense", "target": "self", "baseDamage": 0, "qiCost": 0, "effect": "revive_once", "unlockCondition": null },
+  "fentian_soul_drain": { "name": "噬魂夺魄", "faction": "fentian", "element": "sword", "type": "attack", "target": "single", "baseDamage": 25, "qiCost": 40, "effect": "drain_50_percent_damage", "unlockCondition": "fentian_fear_50" },
+  "fentian_apocalypse": { "name": "焚天灭世", "faction": "fentian", "element": "sword", "type": "ultimate", "target": "all", "baseDamage": 90, "qiCost": 100, "effect": "self_damage_50_percent", "unlockCondition": "complete_fentian_main" }
+}

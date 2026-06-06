@@ -1,0 +1,156 @@
+{
+  "day": 1,
+  "events": [
+    {
+      "id": "day1_intro",
+      "type": "story",
+      "priority": 100,
+      "trigger": { "timeslot": "dawn", "location": "zhongyuan", "conditions": [] },
+      "scene": { "background": "zhongyuan_mountain", "description": "嵩山脚下，晨雾未散。你背着包袱站在山门前，江湖在你面前展开。", "ambient": "outdoor_birds" },
+      "dialogues": [
+        { "speaker": "narrator", "text": "三十天。你只有三十天。" },
+        { "speaker": "narrator", "text": "在这三十天里，你要找到自己的身世之谜，要在五大门派之间周旋。" },
+        { "speaker": "laowei", "text": "年轻人，第一次来嵩山？" },
+        { "speaker": "laowei", "text": "老夫给你指条明路。这江湖啊，看着大，其实也就那么回事。" }
+      ],
+      "choices": [
+        {
+          "id": "accept_guidance",
+          "text": "「多谢前辈指点。」",
+          "conditions": [],
+          "effects": [
+            { "type": "flag", "key": "accepted_laowei_guidance", "set": true },
+            { "type": "reputation", "faction": "taixu", "delta": 5 }
+          ],
+          "nextEvent": null
+        },
+        {
+          "id": "decline_guidance",
+          "text": "「我自己能行。」",
+          "conditions": [],
+          "effects": [
+            { "type": "flag", "key": "rejected_laowei_guidance", "set": true }
+          ],
+          "nextEvent": null
+        },
+        {
+          "id": "ignore_laowei",
+          "text": "「你是谁？」",
+          "conditions": [],
+          "effects": [
+            { "type": "flag", "key": "suspicious_of_laowei", "set": true }
+          ],
+          "nextEvent": "day1_laowei_backstory"
+        }
+      ],
+      "nextEvent": null
+    },
+    {
+      "id": "day1_laowei_backstory",
+      "type": "story",
+      "priority": 50,
+      "trigger": { "timeslot": "dawn", "location": "zhongyuan", "conditions": [ { "type": "flag", "key": "suspicious_of_laowei" } ] },
+      "scene": { "background": "zhongyuan_mountain", "description": "老者微微一笑，眼中闪过一丝深意。" },
+      "dialogues": [
+        { "speaker": "laowei", "text": "老夫？不过是这嵩山脚下一壶浊酒罢了。你若信便信，不信……江湖路远，各自珍重。" }
+      ],
+      "choices": [
+        { "id": "apologize", "text": "「前辈莫怪，是我多心了。」", "conditions": [], "effects": [ { "type": "flag", "key": "accepted_laowei_guidance", "set": true } ], "nextEvent": null }
+      ],
+      "nextEvent": null
+    },
+    {
+      "id": "day1_combat_trial",
+      "type": "combat",
+      "priority": 80,
+      "trigger": { "timeslot": "dawn", "location": "zhongyuan", "conditions": [ { "type": "flag", "key": "accepted_laowei_guidance" } ] },
+      "scene": { "background": "zhongyuan_mountain", "description": "山门前的空地上，几个蒙面人拦住了去路。" },
+      "dialogues": [
+        { "speaker": "narrator", "text": "几个蒙面人从树林中窜出，挡住你的去路。" }
+      ],
+      "combat": {
+        "type": "encounter",
+        "enemies": [ { "id": "bandit_scout", "name": "山贼探子", "health": 60, "qi": 40, "attack": 12, "defense": 5, "speed": 8, "moves": ["劈刀"] } ],
+        "rewards": [ { "type": "flag", "key": "cleared_day1_bandits", "set": true }, { "type": "reputation", "faction": "taixu", "delta": 3 } ],
+        "onDefeat": "day1_after_combat_victory",
+        "onFlee": "day1_flee_success"
+      },
+      "choices": [],
+      "nextEvent": null
+    },
+    {
+      "id": "day1_after_combat_victory",
+      "type": "story",
+      "priority": 90,
+      "trigger": { "timeslot": "dawn", "location": "zhongyuan", "conditions": [ { "type": "flag", "key": "cleared_day1_bandits" } ] },
+      "scene": { "background": "zhongyuan_mountain", "description": "战斗结束，山贼四散逃窜。" },
+      "dialogues": [
+        { "speaker": "laowei", "text": "不错，有两下子。这江湖，看来你是闯定了。" }
+      ],
+      "choices": [
+        { "id": "enter_taixu", "text": "「上山去太虚剑宗看看。」", "conditions": [], "effects": [ { "type": "flag", "key": "heading_to_taixu", "set": true }, { "type": "reputation", "faction": "taixu", "delta": 10 } ], "nextEvent": "day1_noon_taixu" },
+        { "id": "explore_area", "text": "「先在山脚转转。」", "conditions": [], "effects": [ { "type": "flag", "key": "exploring_zhongyuan", "set": true } ], "nextEvent": null }
+      ],
+      "nextEvent": null
+    },
+    {
+      "id": "day1_flee_success",
+      "type": "story",
+      "priority": 70,
+      "trigger": { "timeslot": "dawn", "location": "zhongyuan", "conditions": [ { "type": "flag", "key": "day1_flee_from_bandits" } ] },
+      "scene": { "background": "zhongyuan_mountain", "description": "你转身就跑，消失在山林小道中。" },
+      "dialogues": [
+        { "speaker": "laowei", "text": "跑得倒快。不过这江湖，有些事是跑不掉的。" }
+      ],
+      "choices": [
+        { "id": "continue_up", "text": "「还是上山吧。」", "conditions": [], "effects": [ { "type": "flag", "key": "heading_to_taixu", "set": true } ], "nextEvent": "day1_noon_taixu" }
+      ],
+      "nextEvent": null
+    },
+    {
+      "id": "day1_noon_taixu",
+      "type": "story",
+      "priority": 100,
+      "trigger": { "timeslot": "noon", "location": "zhongyuan", "conditions": [ { "type": "flag", "key": "heading_to_taixu" } ] },
+      "scene": { "background": "zhongyuan_temple_indoor", "description": "太虚剑宗大殿。香烟缭绕，一个白衣青年正在指导弟子练剑。" },
+      "dialogues": [
+        { "speaker": "suqingheng", "text": "来者何人？" },
+        { "speaker": "narrator", "text": "白衣青年转过身来，目光如剑。" }
+      ],
+      "choices": [
+        { "id": "introduce_self", "text": "「在下初入江湖，特来拜访太虚剑宗。」", "conditions": [], "effects": [ { "type": "flag", "key": "met_suqingheng", "set": true } ], "nextEvent": null },
+        { "id": "challenge_directly", "text": "「听说太虚剑宗剑法了得，特来讨教。」", "conditions": [], "effects": [ { "type": "flag", "key": "challenged_suqingheng", "set": true } ], "nextEvent": "day1_duel_suqingheng" }
+      ],
+      "nextEvent": null
+    },
+    {
+      "id": "day1_duel_suqingheng",
+      "type": "combat",
+      "priority": 90,
+      "trigger": { "timeslot": "noon", "location": "zhongyuan", "conditions": [ { "type": "flag", "key": "challenged_suqingheng" } ] },
+      "scene": { "background": "zhongyuan_temple_indoor", "description": "演武场。苏青衡拔剑出鞘，剑身寒光闪闪。" },
+      "dialogues": [ { "speaker": "suqingheng", "text": "好，那就让你见识一下太虚剑法。" } ],
+      "combat": {
+        "type": "story",
+        "enemies": [ { "id": "suqingheng", "name": "苏青衡", "health": 120, "qi": 100, "attack": 20, "defense": 12, "speed": 15, "moves": ["太虚十三剑", "剑气如虹"] } ],
+        "rewards": [ { "type": "flag", "key": "duelled_suqingheng", "set": true }, { "type": "flag", "key": "met_suqingheng", "set": true } ],
+        "onDefeat": "day1_after_duel_suqingheng",
+        "onFlee": null
+      },
+      "choices": [],
+      "nextEvent": null
+    },
+    {
+      "id": "day1_after_duel_suqingheng",
+      "type": "story",
+      "priority": 85,
+      "trigger": { "timeslot": "noon", "location": "zhongyuan", "conditions": [ { "type": "flag", "key": "duelled_suqingheng" } ] },
+      "scene": { "background": "zhongyuan_temple_indoor", "description": "演武场。苏青衡收剑入鞘，目光中多了几分敬意。" },
+      "dialogues": [ { "speaker": "suqingheng", "text": "不错，你的剑法很有意思。有空多来切磋。" } ],
+      "choices": [
+        { "id": "accept_friendship", "text": "「好，一言为定。」", "conditions": [], "effects": [ { "type": "flag", "key": "met_suqingheng", "set": true } ], "nextEvent": null }
+      ],
+      "nextEvent": null
+    }
+  ]
+}

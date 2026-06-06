@@ -1,0 +1,14 @@
+[
+  { "id": "random_bandit_ambush", "weight": 30, "dialogues": [ { "speaker": "narrator", "text": "突然，一群山贼从路边冲出！" } ], "choices": [
+    { "id": "fight", "text": "迎战！", "conditions": [], "effects": [], "nextEvent": null },
+    { "id": "flee", "text": "三十六计走为上。", "conditions": [], "effects": [], "nextEvent": null }
+  ] },
+  { "id": "random_teahouse_intel", "weight": 40, "dialogues": [ { "speaker": "narrator", "text": "你在茶馆歇脚，听到邻桌谈论武林盟主大会……" } ], "choices": [
+    { "id": "listen", "text": "仔细听听。", "conditions": [], "effects": [ { "type": "flag", "key": "heard_alliance_rumors", "set": true } ], "nextEvent": null },
+    { "id": "ignore", "text": "与我无关。", "conditions": [], "effects": [], "nextEvent": null }
+  ] },
+  { "id": "random_mysterious_merchant", "weight": 20, "dialogues": [ { "speaker": "narrator", "text": "一个神秘的商人拦住你，低声说：'少侠，要不要买点好东西？'" } ], "choices": [
+    { "id": "browse", "text": "看看有什么。", "conditions": [], "effects": [ { "type": "stat", "stat": "qi", "delta": 20 } ], "nextEvent": null },
+    { "id": "walk_away", "text": "不了，谢谢。", "conditions": [], "effects": [], "nextEvent": null }
+  ] }
+]
