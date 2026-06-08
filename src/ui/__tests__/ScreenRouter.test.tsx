@@ -1,9 +1,10 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { ScreenRouter, useScreenStore } from '../ScreenRouter';
+import { ScreenRouter } from '../ScreenRouter';
+import { useGameStore } from '../store/gameStore';
 
 beforeEach(() => {
-  useScreenStore.setState({ screen: 'title' });
+  useGameStore.getState().resetGame();
 });
 
 describe('ScreenRouter', () => {
@@ -13,26 +14,26 @@ describe('ScreenRouter', () => {
   });
 
   it('切换到 game 屏幕后显示 GameScreen', () => {
-    useScreenStore.setState({ screen: 'game' });
+    useGameStore.setState({ screen: 'game' });
     render(<ScreenRouter />);
-    expect(screen.getByText(/游戏主界面/)).toBeInTheDocument();
+    expect(screen.getByText(/第1天/)).toBeInTheDocument();
   });
 
   it('切换到 combat 屏幕后显示 CombatScreen', () => {
-    useScreenStore.setState({ screen: 'combat' });
+    useGameStore.setState({ screen: 'combat' });
     render(<ScreenRouter />);
-    expect(screen.getByText(/战斗界面/)).toBeInTheDocument();
+    expect(screen.getByText('战斗界面（待实现）')).toBeInTheDocument();
   });
 
-  it('切换到 graph 屏幕后显示 RelationGraph', () => {
-    useScreenStore.setState({ screen: 'graph' });
+  it('切换到 relation 屏幕后显示 RelationGraph', () => {
+    useGameStore.setState({ screen: 'relation' });
     render(<ScreenRouter />);
-    expect(screen.getByText(/关系图/)).toBeInTheDocument();
+    expect(screen.getByText('江湖关系')).toBeInTheDocument();
   });
 
   it('切换到 ending 屏幕后显示 EndingScreen', () => {
-    useScreenStore.setState({ screen: 'ending' });
+    useGameStore.setState({ screen: 'ending' });
     render(<ScreenRouter />);
-    expect(screen.getByText(/结局画面/)).toBeInTheDocument();
+    expect(screen.getByText('结局画面（待实现）')).toBeInTheDocument();
   });
 });
