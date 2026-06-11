@@ -136,4 +136,93 @@ describe('CombatEngine', () => {
       expect(result.every((c) => c.isDefending === false)).toBe(true);
     });
   });
+
+  describe('executeAction', () => {
+    it('攻击应该对敌人造成伤害', () => {
+      const actor = makeCombatant({ id: 'player', attack: 50, health: 100, maxHealth: 100 });
+      const enemy = makeCombatant({ id: 'enemy', health: 100, maxHealth: 100 });
+      const result = CombatEngine.executeAction(actor, { type: 'attack' }, [enemy]);
+      expect(result.damage).toBe(0); // 伤害值不在返回值中体现
+      expect(result.targets[0].health).toBeLessThan(100);
+      expect(result.log[0]).toContain('攻击');
+    });
+
+    it('防御应该设置防御状态', () => {
+      const actor = makeCombatant({ isDefending: false });
+      const result = CombatEngine.executeAction(actor, { type: 'defend' }, []);
+      expect(result.actor.isDefending).toBe(true);
+      expect(result.log[0]).toContain('防御');
+    });
+
+    it('技能应该消耗内力并造成伤害', () => {
+      const actor = makeCombatant({ id: 'player', attack: 50, qi: 100, maxQi: 100 });
+      const enemy = makeCombatant({ id: 'enemy', health: 100, maxHealth: 100 });
+      const result = CombatEngine.executeAction(actor, { type: 'skill' }, [enemy]);
+      expect(result.actor.qi).toBe(80); // 消耗 20 内力
+      expect(result.targets[0].health).toBeLessThan(100);
+    });
+
+    it('内力不足时技能降级为普攻', () => {
+      const actor = makeCombatant({ id: 'player', attack: 50, qi: 10, maxQi: 100 });
+      const enemy = makeCombatant({ id: 'enemy', health: 100, maxHealth: 100 });
+      const result = CombatEngine.executeAction(actor, { type: 'skill' }, [enemy]);
+      expect(result.actor.qi).toBe(10); // 内力未消耗
+      expect(result.log.some((l) => l.includes('内力不足'))).toBe(true);
+    });
+
+    it('逃跑应该返回 fled 标记', () => {
+      const actor = makeCombatant();
+      const result = CombatEngine.executeAction(actor, { type: 'flee' }, []);
+      expect(result.fled).toBe(true);
+      expect(result.log[0]).toContain('逃跑');
+    });
+  });
+
+  describe('runBattle', () => {
+    it('当所有敌人死亡时应该返回胜利', () => {
+      const player = makeCombatant({ id: 'player', attack: 999 });
+      const enemy = makeCombatant({ id: 'enemy', health: 1, maxHealth: 1 });
+      const result = CombatEngine.runBattle(player, [enemy]);
+      expect(result.victory).toBe(true);
+      expect(result.turns).toBeGreaterThan(0);
+    });
+
+    it('当玩家死亡时应该返回失败', () => {
+      const player = makeCombatant({ id: 'player', health: 1, maxHealth: 1, attack: 1 });
+      const enemy = makeCombatant({ id: 'enemy', health: 1000, maxHealth: 1000, attack: 999 });
+      const result = CombatEngine.runBattle(player, [enemy]);
+      expect(result.victory).toBe(false);
+    });
+
+    it('应该在 maxTurns 后停止', () => {
+      const player = makeCombatant({ id: 'player', health: 10000, maxHealth: 10000, attack: 1 });
+      const enemy = makeCombatant({ id: 'enemy', health: 10000, maxHealth: 10000, attack: 1 });
+      const result = CombatEngine.runBattle(player, [enemy], { maxTurns: 3 });
+      expect(result.turns).toBeLessThanOrEqual(3);
+    });
+
+    it('应该调用 onTurnStart 和 onTurnEnd 回调', () => {
+      const player = makeCombatant({ id: 'player', attack: 999 });
+      const enemy = makeCombatant({ id: 'enemy', health: 1, maxHealth: 1 });
+      let turnStartCount = 0;
+      let turnEndCount = 0;
+      CombatEngine.runBattle(player, [enemy], {
+        onTurnStart: () => turnStartCount++,
+        onTurnEnd: () => turnEndCount++,
+      });
+      expect(turnStartCount).toBeGreaterThan(0);
+      expect(turnEndCount).toBeGreaterThan(0);
+    });
+
+    it('应该调用 onBattleEnd 回调', () => {
+      const player = makeCombatant({ id: 'player', attack: 999 });
+      const enemy = makeCombatant({ id: 'enemy', health: 1, maxHealth: 1 });
+      let battleEndResult: BattleResult | null = null;
+      CombatEngine.runBattle(player, [enemy], {
+        onBattleEnd: (r) => { battleEndResult = r; },
+      });
+      expect(battleEndResult).not.toBeNull();
+      expect(battleEndResult?.victory).toBe(true);
+    });
+  });
 });
