@@ -1,6 +1,5 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { SkillSystem, SKILL_LIBRARY, type Skill, type SkillState } from '../SkillSystem';
-import type { Element } from '../types';
 
 describe('SkillSystem', () => {
   describe('getAllSkills', () => {

@@ -1,4 +1,4 @@
-import type { Combatant, Element } from './types';
+import type { Combatant, Element, BattleAction, BattleState, BattleResult } from './types';
 
 const ADVANTAGE_MAP: Record<Element, Element> = {
   sword: 'fist',
@@ -6,34 +6,6 @@ const ADVANTAGE_MAP: Record<Element, Element> = {
   poison: 'qi',
   qi: 'sword',
 };
-
-// ==================== 类型定义 ====================
-
-/** 战斗行动类型 */
-export interface BattleAction {
-  type: 'attack' | 'defend' | 'skill' | 'flee';
-  skillId?: string;
-  targetIndex?: number;
-}
-
-/** 战斗状态 */
-export interface BattleState {
-  turn: number;
-  player: Combatant;
-  enemies: Combatant[];
-  phase: 'start' | 'playerTurn' | 'enemyTurn' | 'end';
-  log: string[];
-  isPlayerTurn: boolean;
-}
-
-/** 战斗结果 */
-export interface BattleResult {
-  victory: boolean;
-  turns: number;
-  log: string[];
-  player: Combatant;
-  enemies: Combatant[];
-}
 
 export const CombatEngine = {
   calculateDamage(params: {
@@ -271,16 +243,6 @@ export const CombatEngine = {
 
       if (battleEnd.ended) break;
     }
-
-    // 战斗结束
-    const finalBattleState: BattleState = {
-      turn,
-      player: currentPlayer,
-      enemies: currentEnemies,
-      phase: 'end',
-      log,
-      isPlayerTurn: false,
-    };
 
     // 判断胜负
     const allEnemiesDead = currentEnemies.every((e) => e.health <= 0);

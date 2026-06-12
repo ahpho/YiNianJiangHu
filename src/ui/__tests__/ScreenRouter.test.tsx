@@ -22,7 +22,7 @@ describe('ScreenRouter', () => {
   it('切换到 combat 屏幕后显示 CombatScreen', () => {
     useGameStore.setState({ screen: 'combat' });
     render(<ScreenRouter />);
-    expect(screen.getByText('战斗界面（待实现）')).toBeInTheDocument();
+    expect(screen.getByText(/战斗开始/)).toBeInTheDocument();
   });
 
   it('切换到 relation 屏幕后显示 RelationGraph', () => {

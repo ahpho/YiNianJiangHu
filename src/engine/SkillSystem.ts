@@ -275,7 +275,7 @@ export const SkillSystem = {
    * 检查技能是否在冷却中
    */
   isOnCooldown(skillState: SkillState | undefined): boolean {
-    return skillState?.currentCooldown > 0;
+    return (skillState?.currentCooldown ?? 0) > 0;
   },
 
   /**

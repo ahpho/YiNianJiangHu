@@ -217,12 +217,12 @@ describe('CombatEngine', () => {
     it('应该调用 onBattleEnd 回调', () => {
       const player = makeCombatant({ id: 'player', attack: 999 });
       const enemy = makeCombatant({ id: 'enemy', health: 1, maxHealth: 1 });
-      let battleEndResult: BattleResult | null = null;
+      let battleEndResult: any = null;
       CombatEngine.runBattle(player, [enemy], {
         onBattleEnd: (r) => { battleEndResult = r; },
       });
       expect(battleEndResult).not.toBeNull();
-      expect(battleEndResult?.victory).toBe(true);
+      expect(battleEndResult.victory).toBe(true);
     });
   });
 });

@@ -86,6 +86,29 @@ export interface Combatant {
   debuffs: Debuff[];
 }
 
+export interface BattleAction {
+  type: 'attack' | 'defend' | 'skill' | 'flee';
+  skillId?: string;
+  targetIndex?: number;
+}
+
+export interface BattleState {
+  turn: number;
+  player: Combatant;
+  enemies: Combatant[];
+  phase: 'start' | 'playerTurn' | 'enemyTurn' | 'end';
+  log: string[];
+  isPlayerTurn: boolean;
+}
+
+export interface BattleResult {
+  victory: boolean;
+  turns: number;
+  log: string[];
+  player: Combatant;
+  enemies: Combatant[];
+}
+
 export interface Buff {
   type: string;
   remainingTurns: number;
