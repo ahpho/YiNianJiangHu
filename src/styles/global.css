@@ -2,6 +2,7 @@
 @import './typography.css';
 @import './scroll-frame.css';
 @import './animations.css';
+@import './animations-extended.css';
 
 /* CSS Reset */
 *,

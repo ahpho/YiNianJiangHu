@@ -25,6 +25,7 @@ export function CombatScreen() {
   const [skillCooldowns, setSkillCooldowns] = useState<Record<string, number>>({});
   const [showSkillPanel, setShowSkillPanel] = useState(false);
   const [battleEnded, setBattleEnded] = useState<{ victory: boolean } | null>(null);
+  const [damageFlash, setDamageFlash] = useState(false);
 
   // 添加日志
   const addLog = useCallback((text: string, type: CombatLogEntry['type'] = 'info') => {
@@ -97,6 +98,7 @@ export function CombatScreen() {
   const enemyTurn = useCallback((currentPlayer: Combatant, currentEnemies: Combatant[]) => {
     let updatedPlayer = { ...currentPlayer };
     let updatedEnemies = currentEnemies.map((e) => ({ ...e }));
+    let playerTookDamage = false;
 
     updatedEnemies.forEach((enemy) => {
       if (enemy.health <= 0) return;
@@ -112,8 +114,14 @@ export function CombatScreen() {
 
       const damaged = CombatEngine.applyDamage(updatedPlayer, damage);
       updatedPlayer = damaged;
+      if (damage > 0) playerTookDamage = true;
       addLog(`${enemy.name} 攻击你，造成 ${damage} 点伤害`, 'damage');
     });
+
+    if (playerTookDamage) {
+      setDamageFlash(true);
+      setTimeout(() => setDamageFlash(false), 300);
+    }
 
     updatePlayerStats({
       health: updatedPlayer.health,
@@ -170,7 +178,7 @@ export function CombatScreen() {
       </div>
 
       {/* 玩家区域 */}
-      <PlayerCard player={player} isDefending={isDefending} />
+      <PlayerCard player={player} isDefending={isDefending} damageFlash={damageFlash} />
 
       {/* 战斗日志 */}
       <div className="combat-log">
@@ -258,12 +266,12 @@ function EnemyCard({ enemy }: { enemy: Combatant }) {
   );
 }
 
-function PlayerCard({ player, isDefending }: { player: Combatant; isDefending: boolean }) {
+function PlayerCard({ player, isDefending, damageFlash }: { player: Combatant; isDefending: boolean; damageFlash: boolean }) {
   const healthPercent = (player.health / player.maxHealth) * 100;
   const qiPercent = (player.qi / player.maxQi) * 100;
 
   return (
-    <div className={`player-card ${isDefending ? 'defending' : ''}`}>
+    <div className={`player-card ${isDefending ? 'defending' : ''} ${damageFlash ? 'animate-damage' : ''}`}>
       <div className="player-name">
         少侠 {isDefending && <span className="badge-defending">防御中</span>}
       </div>

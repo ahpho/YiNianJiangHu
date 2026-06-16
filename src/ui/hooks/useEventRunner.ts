@@ -108,26 +108,48 @@ export function useEventRunner() {
 
   const currentDialogue: DialogueLine | null = useMemo(() => {
     if (!currentEventState?.dialogues?.length) return null;
+    // 如果对话索引已超出，返回null表示对话播放完毕
+    if (dialogueIndex >= currentEventState.dialogues.length) return null;
     return currentEventState.dialogues[dialogueIndex] ?? null;
   }, [currentEventState, dialogueIndex]);
 
   const hasMoreDialogues = currentEventState !== null && currentEventState.dialogues.length > 0 && dialogueIndex < currentEventState.dialogues.length;
 
-  const showChoices = currentEventState !== null && (
-    currentEventState.dialogues.length === 0 || dialogueIndex >= currentEventState.dialogues.length
-  );
+  const showChoices = currentEventState !== null && !hasMoreDialogues && currentEventState.choices.length > 0;
 
   const advanceDialogue = useCallback(() => {
     if (!currentEventState) return;
+
     if (isTyping) {
-      setIsTyping(false);
-      return;
+      // 检查打字机动画是否已经自然播完
+      const fullText = currentEventState.dialogues[dialogueIndex]?.text ?? '';
+      const renderedEl = document.querySelector('.typewriter-text');
+      const typewriterDone = renderedEl && renderedEl.textContent === fullText;
+
+      if (!typewriterDone) {
+        // 打字机还在动画中 → 立即显示全文
+        setIsTyping(false);
+        return;
+      }
+      // 打字机已自然播完，但 isTyping 还停留在 true
+      // 跳过 setIsTyping(false)，直接继续往下执行推进逻辑
     }
+
     if (dialogueIndex < currentEventState.dialogues.length - 1) {
       setDialogueIndex((i) => i + 1);
       setIsTyping(true);
+    } else {
+      // 最后一句对话显示完毕，跳到选项区
+      setDialogueIndex(currentEventState.dialogues.length);
     }
   }, [currentEventState, dialogueIndex, isTyping]);
+
+  // 打字机动画完成时的回调
+  const onTypingComplete = useCallback(() => {
+    if (isTyping) {
+      setIsTyping(false);
+    }
+  }, [isTyping]);
 
   const applyEffects = useCallback((effects: ChoiceOption['effects']) => {
     for (const effect of effects) {
@@ -154,12 +176,35 @@ export function useEventRunner() {
 
   const selectChoice = useCallback((choice: ChoiceOption) => {
     applyEffects(choice.effects);
+
     if (choice.nextEvent) {
-      // TODO: load nextEvent by ID (future enhancement)
+      const dayData = getDayEvents(currentDay) as DayData | undefined;
+      const nextEvt = dayData?.events?.find((e: any) => e.id === choice.nextEvent);
+      if (nextEvt) {
+        // Handle combat events
+        if (nextEvt.type === 'combat' && nextEvt.combat) {
+          setPendingCombat(nextEvt.combat);
+          setScreen('combat');
+          return;
+        }
+        // Story event: set as current event directly (bypass condition filtering)
+        setCurrentEventState({
+          eventId: nextEvt.id,
+          description: nextEvt.scene?.description ?? '',
+          dialogues: nextEvt.dialogues ?? [],
+          choices: nextEvt.choices ?? [],
+          scene: nextEvt.scene ?? { description: '' },
+        });
+        setDialogueIndex(0);
+        setIsTyping(true);
+        return;
+      }
     }
+
+    // No nextEvent or event not found: clear
     setCurrentEventState(null);
     setDialogueIndex(0);
-  }, [applyEffects]);
+  }, [applyEffects, currentDay, setScreen]);
 
   const skipDialogue = useCallback(() => {
     if (!currentEventState) return;
@@ -177,5 +222,6 @@ export function useEventRunner() {
     selectChoice,
     skipDialogue,
     pendingCombat,
+    onTypingComplete,
   };
 }

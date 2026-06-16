@@ -20,6 +20,7 @@ export function GameScreen() {
     isTyping,
     advanceDialogue,
     selectChoice,
+    onTypingComplete,
   } = useEventRunner();
 
   // Time advance button label
@@ -84,6 +85,7 @@ export function GameScreen() {
                 isTyping={isTyping}
                 onAdvance={advanceDialogue}
                 onSelectChoice={selectChoice}
+                onTypingComplete={onTypingComplete}
               />
             ) : (
               <div style={{ padding: 32, textAlign: 'center' }}>
@@ -119,9 +121,10 @@ interface EventPanelProps {
   isTyping: boolean;
   onAdvance: () => void;
   onSelectChoice: (choice: ChoiceOption) => void;
+  onTypingComplete?: () => void;
 }
 
-function EventPanel({ event, currentDialogue, hasMoreDialogues, showChoices, isTyping, onAdvance, onSelectChoice }: EventPanelProps) {
+function EventPanel({ event, currentDialogue, hasMoreDialogues, showChoices, isTyping, onAdvance, onSelectChoice, onTypingComplete }: EventPanelProps) {
   // Scene description
   const [descRevealed, setDescRevealed] = useState(false);
 
@@ -137,7 +140,7 @@ function EventPanel({ event, currentDialogue, hasMoreDialogues, showChoices, isT
     >
       {/* Scene description */}
       {event.description && (
-        <p className="text-body" style={{
+        <p className="text-body animate-slide-in" style={{
           color: 'var(--ink-gray)',
           fontStyle: 'italic',
           marginBottom: 24,
@@ -154,6 +157,7 @@ function EventPanel({ event, currentDialogue, hasMoreDialogues, showChoices, isT
           speaker={currentDialogue.speaker}
           text={currentDialogue.text}
           isTyping={isTyping}
+          onTypingComplete={onTypingComplete}
         />
       )}
 
@@ -162,14 +166,15 @@ function EventPanel({ event, currentDialogue, hasMoreDialogues, showChoices, isT
         <div style={{ marginTop: 32 }}>
           <hr className="divider-ink" />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {event.choices.map((choice) => (
+            {event.choices.map((choice, index) => (
               <button
                 key={choice.id}
-                className="btn-seal"
+                className="btn-seal animate-fade-in"
                 style={{
                   textAlign: 'left',
                   width: '100%',
                   padding: '12px 20px',
+                  animationDelay: `${index * 0.1}s`,
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -195,12 +200,20 @@ function EventPanel({ event, currentDialogue, hasMoreDialogues, showChoices, isT
 
 // ==================== Dialogue Bubble ====================
 
-function DialogueBubble({ speaker, text, isTyping }: { speaker: string; text: string; isTyping: boolean }) {
+interface DialogueBubbleProps {
+  speaker: string;
+  text: string;
+  isTyping: boolean;
+  onTypingComplete?: () => void;
+}
+
+function DialogueBubble({ speaker, text, isTyping, onTypingComplete }: DialogueBubbleProps) {
   const [displayedText, setDisplayedText] = useState('');
 
   useEffect(() => {
     if (!isTyping) {
       setDisplayedText(text);
+      if (onTypingComplete) onTypingComplete();
       return;
     }
     setDisplayedText('');
@@ -208,10 +221,13 @@ function DialogueBubble({ speaker, text, isTyping }: { speaker: string; text: st
     const interval = setInterval(() => {
       i++;
       setDisplayedText(text.slice(0, i));
-      if (i >= text.length) clearInterval(interval);
+      if (i >= text.length) {
+        clearInterval(interval);
+        if (onTypingComplete) onTypingComplete();
+      }
     }, 40);
     return () => clearInterval(interval);
-  }, [text, isTyping]);
+  }, [text, isTyping, onTypingComplete]);
 
   const speakerName = SPEAKER_NAMES[speaker] ?? speaker;
   const speakerColor = SPEAKER_COLORS[speaker] ?? 'var(--ink-gray)';
@@ -221,7 +237,7 @@ function DialogueBubble({ speaker, text, isTyping }: { speaker: string; text: st
       <span className="text-h3 font-title-cn" style={{ color: speakerColor, fontSize: 15 }}>
         {speakerName}
       </span>
-      <p className="text-body" style={{ marginTop: 4, lineHeight: 1.8 }}>
+      <p className="text-body typewriter-text" style={{ marginTop: 4, lineHeight: 1.8 }}>
         {displayedText}
         {isTyping && displayedText.length < text.length && (
           <span className="typewriter-cursor" />

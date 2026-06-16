@@ -151,6 +151,170 @@
         { "id": "accept_friendship", "text": "「好，一言为定。」", "conditions": [], "effects": [ { "type": "flag", "key": "met_suqingheng", "set": true } ], "nextEvent": null }
       ],
       "nextEvent": null
+    },
+    {
+      "id": "day1_dusk_jianghu",
+      "type": "story",
+      "priority": 75,
+      "trigger": { "timeslot": "dusk", "location": "zhongyuan", "conditions": [] },
+      "scene": { "background": "zhongyuan_night", "description": "暮色四合，你正沿着山路往下走，忽然看到前方树影间有一个模糊的身影在移动。" },
+      "dialogues": [
+        { "speaker": "narrator", "text": "暮色中，一个黑衣人影匆匆而过，似乎有意避开你的目光。" },
+        { "speaker": "narrator", "text": "你隐约听到他低声喃喃，提到了「太虚」和「密信」。" }
+      ],
+      "choices": [
+        {
+          "id": "investigate_mystery",
+          "text": "「跟上去看看。」",
+          "conditions": [],
+          "effects": [
+            { "type": "flag", "key": "investigated_mystery", "set": true }
+          ],
+          "nextEvent": null
+        },
+        {
+          "id": "ignore_mystery",
+          "text": "「算了，不关我事。」",
+          "conditions": [],
+          "effects": [],
+          "nextEvent": null
+        }
+      ],
+      "nextEvent": null
+    },
+    {
+      "id": "day1_dusk_rest",
+      "type": "story",
+      "priority": 80,
+      "trigger": {
+        "timeslot": "dusk",
+        "location": "zhongyuan",
+        "conditions": [
+          { "type": "flag", "key": "heading_to_taixu" }
+        ]
+      },
+      "scene": { "background": "zhongyuan_night", "description": "山脚下的「听风客栈」灯火通明，老板娘正在门口招呼客人。" },
+      "dialogues": [
+        { "speaker": "luxiaoman", "text": "哟，这位少侠面生得很，是第一次来嵩山吧？" },
+        { "speaker": "luxiaoman", "text": "来来来，里头坐。咱们这儿有上好的竹叶青，还有热腾腾的阳春面。" },
+        { "speaker": "luxiaoman", "text": "赶路累了？要不今晚就在这歇着，明天再上山也不迟。" }
+      ],
+      "choices": [
+        {
+          "id": "rest_at_inn",
+          "text": "「那就叨扰了，给我一间客房。」",
+          "conditions": [],
+          "effects": [
+            { "type": "flag", "key": "rested_at_inn", "set": true },
+            { "type": "flag", "key": "met_luxiaoman", "set": true }
+          ],
+          "nextEvent": null
+        },
+        {
+          "id": "wander_on",
+          "text": "「不了，我再转转。」",
+          "conditions": [],
+          "effects": [
+            { "type": "flag", "key": "exploring_zhongyuan", "set": true }
+          ],
+          "nextEvent": null
+        }
+      ],
+      "nextEvent": null
+    },
+    {
+      "id": "day1_dusk_random",
+      "type": "story",
+      "priority": 60,
+      "trigger": {
+        "timeslot": "dusk",
+        "location": "zhongyuan",
+        "conditions": [
+          { "type": "flag", "key": "exploring_zhongyuan" }
+        ]
+      },
+      "scene": { "background": "zhongyuan_night", "description": "你走到一片开阔的草地上，一个背着大包袱的行脚商人正在路边歇脚。" },
+      "dialogues": [
+        { "speaker": "narrator", "text": "那商人见你走近，笑着招呼道：" },
+        { "speaker": "narrator", "text": "「小兄弟，要买点什么？我这有从西域带来的好货，便宜卖你。」" }
+      ],
+      "choices": [
+        {
+          "id": "buy_items",
+          "text": "「看看有什么好东西。」",
+          "conditions": [],
+          "effects": [
+            { "type": "flag", "key": "bought_items", "set": true }
+          ],
+          "nextEvent": null
+        },
+        {
+          "id": "walk_away",
+          "text": "「不用了，谢谢。」",
+          "conditions": [],
+          "effects": [],
+          "nextEvent": null
+        }
+      ],
+      "nextEvent": null
+    },
+    {
+      "id": "day1_night_dream",
+      "type": "story",
+      "priority": 90,
+      "trigger": {
+        "timeslot": "night",
+        "location": "zhongyuan",
+        "conditions": [
+          { "type": "flag", "key": "rested_at_inn" }
+        ]
+      },
+      "scene": { "background": "zhongyuan_night", "description": "夜深了，你躺在客栈的床上，很快便沉沉睡去。梦中，你看到了一个模糊的画面。" },
+      "dialogues": [
+        { "speaker": "narrator", "text": "梦里，你站在一片火海之中，四周是倒塌的房屋和惊恐的人群。" },
+        { "speaker": "narrator", "text": "一个女子的声音在远处呼喊着什么，但你听不清楚。" },
+        { "speaker": "narrator", "text": "你猛然惊醒，满身冷汗。窗外月色如水，一切仿佛什么都没发生。" }
+      ],
+      "choices": [],
+      "nextEvent": null
+    },
+    {
+      "id": "day1_night_camp",
+      "type": "story",
+      "priority": 70,
+      "trigger": {
+        "timeslot": "night",
+        "location": "zhongyuan",
+        "conditions": [
+          { "type": "flag", "key": "exploring_zhongyuan" }
+        ]
+      },
+      "scene": { "background": "zhongyuan_night", "description": "你找了一棵大树，靠着树干坐下。头顶星光点点，夜风带着草木的清香。" },
+      "dialogues": [
+        { "speaker": "narrator", "text": "夜色静谧，虫鸣此起彼伏。你感到一丝疲惫，但也有一种难得的安宁。" },
+        { "speaker": "narrator", "text": "你想起白天的经历，心中思绪万千。" }
+      ],
+      "choices": [
+        {
+          "id": "meditate",
+          "text": "盘膝打坐，调息运气。",
+          "conditions": [],
+          "effects": [
+            { "type": "flag", "key": "meditated_night1", "set": true }
+          ],
+          "nextEvent": null
+        },
+        {
+          "id": "sleep_outdoors",
+          "text": "就地睡去，明天再说。",
+          "conditions": [],
+          "effects": [
+            { "type": "flag", "key": "slept_outdoors", "set": true }
+          ],
+          "nextEvent": null
+        }
+      ],
+      "nextEvent": null
     }
   ]
 }

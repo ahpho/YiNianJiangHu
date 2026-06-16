@@ -1,0 +1,70 @@
+/* ==================== Extended Animations ==================== */
+
+/* fadeIn — 淡入，用于对话框、选项按钮 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* slideInLeft — 左滑入，用于场景描述 */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* damageShake — 抖动，用于战斗受伤反馈 */
+@keyframes damageShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-3px);
+  }
+  40% {
+    transform: translateX(3px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+/* pulseGold — 金色脉冲光晕，用于重要按钮 */
+@keyframes pulseGold {
+  0%, 100% {
+    box-shadow: 0 0 4px var(--shadow-gold);
+  }
+  50% {
+    box-shadow: 0 0 16px var(--gold), 0 0 24px var(--shadow-gold);
+  }
+}
+
+/* ==================== Utility Classes ==================== */
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out both;
+}
+
+.animate-slide-in {
+  animation: slideInLeft 0.4s ease-out both;
+}
+
+.animate-damage {
+  animation: damageShake 0.3s ease-in-out;
+}
+
+.animate-pulse-gold {
+  animation: pulseGold 1.5s ease-in-out infinite;
+}
